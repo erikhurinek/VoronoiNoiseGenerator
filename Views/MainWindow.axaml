@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:VoronoiNoiseGenerator.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:VoronoiNoiseGenerator.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="VoronoiNoiseGenerator.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="VoronoiNoiseGenerator">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+        to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Label Content="Render Passes" />
+            <ItemsControl x:Name="icRenderPasses" ItemsSource="{Binding Passes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:PassSettings">
+                        <StackPanel Orientation="Vertical" Margin="5,0">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableDescriptors}" SelectedItem="{Binding SelectedDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
+                            </Grid>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0" Content="X:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding X, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="2" Grid.Row="0" Content="Y:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="0" Grid.Row="1" Content="W:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Width, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="2" Grid.Row="1" Content="H:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Height, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                            </Grid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Separator Height="1" />
+            <Button x:Name="btRender" Content="Render" HorizontalAlignment="Center" Padding="30,5" Command="{Binding RenderCommand}" />
+            <Button x:Name="btAddPass" Content="Add Pass" HorizontalAlignment="Center" Padding="30,5" Command="{Binding AddPassCommand}" />
+        </StackPanel>
+
+        <Image x:Name="imgDisplayImage" Grid.Column="1" Source="{Binding DisplayImage}" />
+    </Grid>
+</Window>
