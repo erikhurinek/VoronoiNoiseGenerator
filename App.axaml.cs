@@ -22,7 +22,7 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddTransient<IRenderer, TestRenderer>();
-        // services.AddTransient<IRenderer, VoronoiDistanceRenderer>();
+        services.AddTransient<IRenderer, VoronoiDistanceRenderer>();
         // services.AddTransient<IRenderer, VoronoiEdgeRenderer>();
         // services.AddTransient<IRenderer, VoronoiCellRenderer>();
 

@@ -56,6 +56,29 @@
                                 <Label Grid.Column="2" Grid.Row="1" Content="H:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
                                 <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Height, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
                             </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0" Content="Radius:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Radius, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="0" Grid.Row="1" Content="Samples:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Samples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="0" Grid.Row="2" Content="Subsamples:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Subsamples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="0" Grid.Row="3" Content="Seed:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Seed, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <Label Grid.Column="0" Grid.Row="4" Content="Wrap:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                                <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Wrap, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,5" />
+                            </Grid>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -65,6 +88,6 @@
             <Button x:Name="btAddPass" Content="Add Pass" HorizontalAlignment="Center" Padding="30,5" Command="{Binding AddPassCommand}" />
         </StackPanel>
 
-        <Image x:Name="imgDisplayImage" Grid.Column="1" Source="{Binding DisplayImage}" />
+        <Image x:Name="imgDisplayImage" Grid.Column="1" Source="{Binding DisplayImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None" />
     </Grid>
 </Window>

@@ -6,7 +6,7 @@ public class TestRenderer : IRenderer
 {
     public RendererDescriptor Descriptor => new(typeof(TestRenderer), "Test");
 
-    public WriteableBitmap Render(WriteableBitmap source)
+    public WriteableBitmap Render(WriteableBitmap source, PassSettings settings)
     {
         using var framebuffer = source.Lock();
 

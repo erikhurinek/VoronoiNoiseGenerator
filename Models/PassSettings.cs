@@ -4,12 +4,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VoronoiNoiseGenerator.Models;
 
-public partial class PassSettings : ObservableObject
+public partial class PassSettings(IEnumerable<RendererDescriptor> renderers, RendererDescriptor selectedDescriptor) : ObservableObject
 {
-    public IReadOnlyList<RendererDescriptor> AvailableDescriptors { get; } = new List<RendererDescriptor>();
+    public IReadOnlyList<RendererDescriptor> AvailableDescriptors { get; } = renderers.ToList();
 
     [ObservableProperty]
-    public partial RendererDescriptor? SelectedDescriptor { get; set; } = null;
+    public partial RendererDescriptor? SelectedDescriptor { get; set; } = selectedDescriptor;
 
     [ObservableProperty]
     public partial bool IsEnabled { get; set; } = true;
@@ -26,9 +26,14 @@ public partial class PassSettings : ObservableObject
     [ObservableProperty]
     public partial int Height { get; set; } = 128;
 
-    public PassSettings(IEnumerable<RendererDescriptor> renderers, RendererDescriptor selectedDescriptor)
-    {
-        AvailableDescriptors = renderers.ToList();
-        SelectedDescriptor = selectedDescriptor;
-    }
+    [ObservableProperty]
+    public partial int Radius { get; set; } = 10;
+    [ObservableProperty]
+    public partial int Samples { get; set; } = 1000;
+    [ObservableProperty]
+    public partial int Subsamples { get; set; } = 30;
+    [ObservableProperty]
+    public partial int Seed { get; set; } = 0;
+    [ObservableProperty]
+    public partial bool Wrap { get; set; } = false;
 }

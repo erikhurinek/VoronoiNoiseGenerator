@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -67,7 +68,7 @@ public partial class MainViewModel : ViewModelBase
 
             IRenderer renderer = _rendererFactory.Get(descriptor);
 
-            bitmap = renderer.Render(bitmap);
+            bitmap = renderer.Render(bitmap, pass);
         }
 
         DisplayImage = bitmap;
