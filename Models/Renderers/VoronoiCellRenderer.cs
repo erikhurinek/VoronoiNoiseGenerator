@@ -1,5 +1,4 @@
 using System;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;

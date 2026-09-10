@@ -1,0 +1,70 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:VoronoiNoiseGenerator.Models"
+    x:Class="VoronoiNoiseGenerator.Views.ColourMixerChannel"
+    x:DataType="models:ColourMixerChannel">
+
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="5">
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Content="Factor: "
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Margin="0,0,5,0" />
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Text="{Binding Factor, Mode=TwoWay}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center" />
+
+        <Grid
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            ColumnDefinitions="*,*,*,*"
+            HorizontalAlignment="Stretch">
+
+            <ToggleButton
+                Grid.Column="0"
+                Content="R"
+                IsChecked="{Binding MixRed, Mode=TwoWay}"
+                CornerRadius="6,0,0,6"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Padding="8,4" />
+
+            <ToggleButton
+                Grid.Column="1"
+                Content="G"
+                IsChecked="{Binding MixGreen, Mode=TwoWay}"
+                CornerRadius="0"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Margin="-1,0,0,0"
+                Padding="8,4" />
+
+            <ToggleButton
+                Grid.Column="2"
+                Content="B"
+                IsChecked="{Binding MixBlue, Mode=TwoWay}"
+                CornerRadius="0"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Margin="-1,0,0,0"
+                Padding="8,4" />
+
+            <ToggleButton
+                Grid.Column="3"
+                Content="A"
+                IsChecked="{Binding MixAlpha, Mode=TwoWay}"
+                CornerRadius="0,6,6,0"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Margin="-1,0,0,0"
+                Padding="8,4" />
+
+        </Grid>
+    </Grid>
+</UserControl>

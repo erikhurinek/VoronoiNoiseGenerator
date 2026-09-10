@@ -15,34 +15,46 @@ public class VoronoiDistanceRenderer : IRenderer
     /// <inheritdoc/>
     public void Render(WriteableBitmap target, PassSettings settings)
     {
+        // Get the colour mixer
+        IColourMixer colourMixer = settings.ColourMixer;
+
+        // Cast the renderer settings to the expected type.
         VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings;
 
         if (rendererSettings is null)
             throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
+        // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
             target.PixelSize.Width,
             target.PixelSize.Height,
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
-            rendererSettings.Wrap
+            rendererSettings.Wrap,
+            rendererSettings.Seed
         );
-        var samples = sampler.GenerateSamples();
-        PixelIterator.IteratePixels(target, (x, y) =>
-        {
-            var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);
-            if (neighbours.Any())
-            {
-                Neighbour minSample = neighbours.OrderBy(n => n.Distance).First();
 
-                byte intensity = (byte)(Math.Min(minSample.Distance / rendererSettings.Radius, 1.0) * 255);
-                return RGBA.FromRgba(intensity, intensity, intensity, 255);
-            }
-            else
-            {
-                return RGBA.Transparent;
-            }
+        // Generate the samples.
+        ISampleCollection samples = sampler.GenerateSamples();
+
+        // Iterate over each pixel, and set the color based on the distance.
+        BitmapWriter.Write(target, colourMixer, (x, y) =>
+        {
+            // Get all relevant samples.
+            var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);
+
+            // There should usually be a sample, but if the settings were misconfigured, 
+            // return a transparent pixel.
+            if (!neighbours.Any())
+                return Colour.Black;
+
+            // Get the nearest sample.
+            Neighbour minSample = neighbours.OrderBy(n => n.Distance).First();
+
+            // Calculate and set the intensity.
+            double intensity = Math.Min(minSample.Distance / rendererSettings.Radius, 1.0);
+            return new Colour(intensity, intensity, intensity, 1.0);
         });
     }
 }

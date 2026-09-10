@@ -1,5 +1,6 @@
 namespace VoronoiNoiseGenerator.Models;
 
-public interface IRendererSettings
-{
-}
+/// <summary>
+/// Marker interface for the settings of a renderer.
+/// </summary>
+public interface IRendererSettings { }

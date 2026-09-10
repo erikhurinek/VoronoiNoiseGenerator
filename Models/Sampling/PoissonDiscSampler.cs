@@ -13,13 +13,15 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="maxSamples">The maximum number of samples to generate.</param>
 /// <param name="subsamples">The number of candidate samples to generate for each active sample.</param>
 /// <param name="wrapped">Indicates whether the sampling area is wrapped (toroidal).</param>
+/// <param name="seed">The random seed.</param>
 public class PoissonDiscSampler(
     double width,
     double height,
     double radius,
     int maxSamples,
     int subsamples,
-    bool wrapped
+    bool wrapped,
+    int seed
 ) : ISampler
 {
     /// <summary>
@@ -53,6 +55,11 @@ public class PoissonDiscSampler(
     public bool Wrapped { get; } = wrapped;
 
     /// <summary>
+    /// The random seed.
+    /// </summary>
+    public int Seed { get; } = seed;
+
+    /// <summary>
     /// Generates a collection of samples based on the sampler's parameters.
     /// </summary>
     /// <returns>A collection of samples.</returns>
@@ -71,8 +78,10 @@ public class PoissonDiscSampler(
             ? new WrappedSampleGrid(Width, Height, gridSize, gridSize)
             : new SampleGrid(Width, Height, gridSize, gridSize);
 
+        Random random = new(Seed);
+
         // Randomly select the initial sample.
-        (double, double) initialSample = (Random.Shared.NextDouble() * Width, Random.Shared.NextDouble() * Height);
+        (double, double) initialSample = (random.NextDouble() * Width, random.NextDouble() * Height);
         grid.Add(initialSample.Item1, initialSample.Item2);
 
         // Use a queue to track active samples for generating candidates.
@@ -90,8 +99,8 @@ public class PoissonDiscSampler(
             for (int i = 0; i < Subsamples; i++)
             {
                 // Generate random angle and offset.
-                double angle = Random.Shared.NextDouble() * 2 * Math.PI;
-                double offset = Radius + Random.Shared.NextDouble() * Radius;
+                double angle = random.NextDouble() * 2 * Math.PI;
+                double offset = Radius + random.NextDouble() * Radius;
 
                 var candidate = (
                     sample.Item1 + offset * Math.Cos(angle),

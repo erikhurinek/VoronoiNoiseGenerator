@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,6 +14,7 @@ public partial class MainViewModel : ViewModelBase
 {
     private IEnumerable<IRenderer> _renderers;
     private IEnumerable<RendererDescriptor> _descriptors;
+    private IEnumerable<ColourMixerDescriptor> _colourMixerDescriptors;
     private RendererRegistry _rendererRegistry;
 
     [ObservableProperty]
@@ -36,13 +36,15 @@ public partial class MainViewModel : ViewModelBase
     {
         _renderers = new List<IRenderer>();
         _descriptors = new List<RendererDescriptor>();
+        _colourMixerDescriptors = new List<ColourMixerDescriptor>();
         _rendererRegistry = new RendererRegistry();
     }
 
-    public MainViewModel(RendererRegistry rendererFactory, IEnumerable<IRenderer> renderers)
+    public MainViewModel(RendererRegistry rendererFactory, IEnumerable<IRenderer> renderers, IEnumerable<IColourMixer> colourMixers)
     {
         _renderers = renderers;
         _descriptors = _renderers.Select(r => r.Descriptor);
+        _colourMixerDescriptors = colourMixers.Select(c => c.Descriptor);
         _rendererRegistry = rendererFactory;
     }
 
@@ -61,7 +63,7 @@ public partial class MainViewModel : ViewModelBase
             if (pass is null || !pass.IsEnabled)
                 continue;
 
-            var descriptor = pass.SelectedDescriptor;
+            var descriptor = pass.SelectedRenderer;
 
             if (descriptor is null)
                 continue;
@@ -77,6 +79,6 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     public void AddPass()
     {
-        Passes.Add(new PassSettings(_descriptors, _descriptors.First()));
+        Passes.Add(new PassSettings(_descriptors, _colourMixerDescriptors));
     }
 }

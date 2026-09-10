@@ -28,7 +28,6 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Label Content="Global Settings"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -40,13 +39,12 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Content="Width:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                <Label Grid.Column="0" Grid.Row="0" Content="W:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ImageWidth, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-                <Label Grid.Column="2" Grid.Row="0" Content="Height:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+                <Label Grid.Column="2" Grid.Row="0" Content="H:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
                 <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding ImageHeight, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
             </Grid>
             <Separator Height="1" />
-            <Label Content="Render Passes" />
             <ItemsControl x:Name="icRenderPasses" ItemsSource="{Binding Passes}" />
             <Separator Height="1" />
             <Button x:Name="btRender" Content="Render" HorizontalAlignment="Center" Padding="30,5" Command="{Binding RenderCommand}" />

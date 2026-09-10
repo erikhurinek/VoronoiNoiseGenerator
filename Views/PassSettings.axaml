@@ -11,6 +11,9 @@
         </DataTemplate>
         <DataTemplate x:DataType="models:TestRendererSettings">
         </DataTemplate>
+        <DataTemplate x:DataType="models:ColourMixerChannel">
+            <views:ColourMixerChannel />
+        </DataTemplate>
     </UserControl.DataTemplates>
     <StackPanel Orientation="Vertical" Margin="5,0">
         <Grid HorizontalAlignment="Stretch">
@@ -18,8 +21,13 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableDescriptors}" SelectedItem="{Binding SelectedDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableRenderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
             <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
+
         </Grid>
         <Grid >
             <Grid.ColumnDefinitions>
@@ -38,5 +46,7 @@
             <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
         </Grid>
         <ContentControl Content="{Binding RendererSettings, Mode=OneWay}" />
+        <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixer, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
+        <ContentControl Content="{Binding ColourMixer, Mode=OneWay}" />
     </StackPanel>
 </UserControl>
