@@ -1,0 +1,42 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:VoronoiNoiseGenerator.Models"
+    xmlns:views="using:VoronoiNoiseGenerator.Views"
+    x:Class="VoronoiNoiseGenerator.Views.PassSettings"
+    x:DataType="models:PassSettings">
+    <UserControl.DataTemplates>
+        <DataTemplate x:DataType="models:VoronoiRendererSettings">
+            <views:VoronoiRendererSettings />
+        </DataTemplate>
+        <DataTemplate x:DataType="models:TestRendererSettings">
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <StackPanel Orientation="Vertical" Margin="5,0">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableDescriptors}" SelectedItem="{Binding SelectedDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
+            <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
+        </Grid>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="0" Content="X:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding X, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+            <Label Grid.Column="2" Grid.Row="0" Content="Y:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
+            <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+        </Grid>
+        <ContentControl Content="{Binding RendererSettings, Mode=OneWay}" />
+    </StackPanel>
+</UserControl>

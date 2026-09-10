@@ -15,7 +15,7 @@ public partial class MainViewModel : ViewModelBase
 {
     private IEnumerable<IRenderer> _renderers;
     private IEnumerable<RendererDescriptor> _descriptors;
-    private RendererRegistry _rendererFactory;
+    private RendererRegistry _rendererRegistry;
 
     [ObservableProperty]
     public partial ObservableCollection<PassSettings> Passes { get; set; } = new ObservableCollection<PassSettings>();
@@ -27,30 +27,30 @@ public partial class MainViewModel : ViewModelBase
     public partial Bitmap? DisplayImage { get; private set; } = null;
 
     [ObservableProperty]
-    public partial int DisplayWidth { get; set; } = 128;
+    public partial int ImageWidth { get; set; } = 128;
 
     [ObservableProperty]
-    public partial int DisplayHeight { get; set; } = 128;
+    public partial int ImageHeight { get; set; } = 128;
 
     public MainViewModel()
     {
         _renderers = new List<IRenderer>();
         _descriptors = new List<RendererDescriptor>();
-        _rendererFactory = new RendererRegistry();
+        _rendererRegistry = new RendererRegistry();
     }
 
     public MainViewModel(RendererRegistry rendererFactory, IEnumerable<IRenderer> renderers)
     {
         _renderers = renderers;
         _descriptors = _renderers.Select(r => r.Descriptor);
-        _rendererFactory = rendererFactory;
+        _rendererRegistry = rendererFactory;
     }
 
     [RelayCommand]
     public void Render()
     {
         var bitmap = new WriteableBitmap(
-            new PixelSize(DisplayWidth, DisplayHeight),
+            new PixelSize(ImageWidth, ImageHeight),
             new Vector(96, 96),
             PixelFormat.Rgba8888,
             AlphaFormat.Opaque
@@ -66,9 +66,9 @@ public partial class MainViewModel : ViewModelBase
             if (descriptor is null)
                 continue;
 
-            IRenderer renderer = _rendererFactory.Get(descriptor);
+            IRenderer renderer = _rendererRegistry.Get(descriptor.RendererType);
 
-            bitmap = renderer.Render(bitmap, pass);
+            renderer.Render(bitmap, pass);
         }
 
         DisplayImage = bitmap;

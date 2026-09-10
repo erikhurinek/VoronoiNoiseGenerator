@@ -5,9 +5,9 @@ namespace VoronoiNoiseGenerator.Models;
 
 public class VoronoiEdgeRenderer : IRenderer
 {
-    public RendererDescriptor Descriptor => new(typeof(VoronoiEdgeRenderer), "Voronoi Edge");
+    public RendererDescriptor Descriptor => new("Voronoi Edge", typeof(VoronoiEdgeRenderer), typeof(VoronoiRendererSettings));
 
-    public WriteableBitmap Render(WriteableBitmap source, PassSettings settings)
+    public void Render(WriteableBitmap target, PassSettings settings)
     {
         throw new NotImplementedException();
     }

@@ -4,11 +4,11 @@ namespace VoronoiNoiseGenerator.Models;
 
 public class TestRenderer : IRenderer
 {
-    public RendererDescriptor Descriptor => new(typeof(TestRenderer), "Test");
+    public RendererDescriptor Descriptor => new("Test Renderer", typeof(TestRenderer), typeof(TestRendererSettings));
 
-    public WriteableBitmap Render(WriteableBitmap source, PassSettings settings)
+    public void Render(WriteableBitmap bitmap, PassSettings settings)
     {
-        using var framebuffer = source.Lock();
+        using var framebuffer = bitmap.Lock();
 
         unsafe
         {
@@ -29,7 +29,5 @@ public class TestRenderer : IRenderer
                 }
             }
         }
-
-        return source;
     }
 }

@@ -4,23 +4,39 @@ using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;
 
-
+/// <summary>
+/// A renderer for the Euclidean distance to the nearest sample.
+/// </summary>
 public class VoronoiDistanceRenderer : IRenderer
 {
-    public RendererDescriptor Descriptor => new(typeof(VoronoiDistanceRenderer), "Voronoi Distance");
+    /// <inheritdoc/>
+    public RendererDescriptor Descriptor => new("Voronoi Distance", typeof(VoronoiDistanceRenderer), typeof(VoronoiRendererSettings));
 
-    public WriteableBitmap Render(WriteableBitmap source, PassSettings settings)
+    /// <inheritdoc/>
+    public void Render(WriteableBitmap target, PassSettings settings)
     {
-        PoissonDiscSampler sampler = new(source.PixelSize.Width, source.PixelSize.Height);
-        var samples = sampler.GenerateSamples(settings.Radius, settings.Samples, settings.Subsamples, settings.Wrap);
-        PixelIterator.IteratePixels(source, (x, y) =>
+        VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings;
+
+        if (rendererSettings is null)
+            throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
+
+        ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
+            target.PixelSize.Width,
+            target.PixelSize.Height,
+            rendererSettings.Radius,
+            rendererSettings.MaxSamples,
+            rendererSettings.Subsamples,
+            rendererSettings.Wrap
+        );
+        var samples = sampler.GenerateSamples();
+        PixelIterator.IteratePixels(target, (x, y) =>
         {
-            var neighbours = samples.Neighbours(x, y, settings.Radius * 2);
+            var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);
             if (neighbours.Any())
             {
                 Neighbour minSample = neighbours.OrderBy(n => n.Distance).First();
 
-                byte intensity = (byte)(Math.Min(minSample.Distance / settings.Radius, 1.0) * 255);
+                byte intensity = (byte)(Math.Min(minSample.Distance / rendererSettings.Radius, 1.0) * 255);
                 return RGBA.FromRgba(intensity, intensity, intensity, 255);
             }
             else
@@ -28,7 +44,5 @@ public class VoronoiDistanceRenderer : IRenderer
                 return RGBA.Transparent;
             }
         });
-
-        return source;
     }
 }

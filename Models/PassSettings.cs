@@ -1,15 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VoronoiNoiseGenerator.Models;
 
-public partial class PassSettings(IEnumerable<RendererDescriptor> renderers, RendererDescriptor selectedDescriptor) : ObservableObject
+/// <summary>
+/// Represents the settings for a single rendering pass.
+/// </summary>
+/// <param name="availableRenderers">The list of available renderer descriptors.</param>
+/// <param name="selectedDescriptor">The initially selected renderer descriptor.</param>
+public partial class PassSettings(IEnumerable<RendererDescriptor> availableRenderers, RendererDescriptor selectedDescriptor) : ObservableObject
 {
-    public IReadOnlyList<RendererDescriptor> AvailableDescriptors { get; } = renderers.ToList();
+    public IReadOnlyList<RendererDescriptor> AvailableDescriptors { get; } = availableRenderers.ToList();
 
     [ObservableProperty]
-    public partial RendererDescriptor? SelectedDescriptor { get; set; } = selectedDescriptor;
+    public partial RendererDescriptor SelectedDescriptor { get; set; } = selectedDescriptor;
 
     [ObservableProperty]
     public partial bool IsEnabled { get; set; } = true;
@@ -21,19 +27,15 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> renderers, Ren
     public partial int Y { get; set; } = 0;
 
     [ObservableProperty]
-    public partial int Width { get; set; } = 128;
+    public partial IRendererSettings? RendererSettings { get; set; } = CreateRendererSettings(selectedDescriptor);
 
-    [ObservableProperty]
-    public partial int Height { get; set; } = 128;
+    partial void OnSelectedDescriptorChanged(RendererDescriptor value)
+    {
+        RendererSettings = CreateRendererSettings(value);
+    }
 
-    [ObservableProperty]
-    public partial int Radius { get; set; } = 10;
-    [ObservableProperty]
-    public partial int Samples { get; set; } = 1000;
-    [ObservableProperty]
-    public partial int Subsamples { get; set; } = 30;
-    [ObservableProperty]
-    public partial int Seed { get; set; } = 0;
-    [ObservableProperty]
-    public partial bool Wrap { get; set; } = false;
+    private static IRendererSettings? CreateRendererSettings(RendererDescriptor descriptor)
+    {
+        return Activator.CreateInstance(descriptor.SettingsType) as IRendererSettings;
+    }
 }

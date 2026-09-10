@@ -1,0 +1,148 @@
+using System;
+using System.Collections.Generic;
+
+namespace VoronoiNoiseGenerator.Models;
+
+/// <summary>
+/// A sample grid that wraps around at the edges, allowing for toroidal sampling.
+/// </summary>
+/// <param name="width">The width of the grid in sample space.</param>
+/// <param name="height">The height of the grid in sample space.</param>
+/// <param name="gridWidth">The width of each grid cell in sample space.</param>
+/// <param name="gridHeight">The height of each grid cell in sample space.</param>
+public sealed class WrappedSampleGrid(
+    double width,
+    double height,
+    int gridWidth,
+    int gridHeight) : ISampleGrid
+{
+    /// <summary>
+    /// A dictionary that maps grid cell coordinates to the sample stored in that cell.
+    /// </summary>
+    private readonly Dictionary<(int X, int Y), (double X, double Y)> _samples = new();
+
+    /// <inheritdoc/>
+    public double Width { get; } = width;
+
+    /// <inheritdoc/>
+    public double Height { get; } = height;
+
+    /// <inheritdoc/>
+    public int GridWidth { get; } = gridWidth;
+
+    /// <inheritdoc/>
+    public int GridHeight { get; } = gridHeight;
+
+    /// <summary>The number of grid cells in the X direction.</summary>
+    private int VoxelCountX => (int)Math.Ceiling(Width / GridWidth);
+
+    /// <summary>The number of grid cells in the Y direction.</summary>
+    private int VoxelCountY => (int)Math.Ceiling(Height / GridHeight);
+
+    /// <summary>
+    /// Calculates the floored (positive) modulus.
+    /// </summary>
+    /// <param name="value">The value to be modded.</param>
+    /// <param name="modulus">The modulus.</param>
+    /// <returns>The floored modulus of the value.</returns>
+    private static int Mod(int value, int modulus) => (value % modulus + modulus) % modulus;
+
+    /// <summary>
+    /// Wraps the sample coordinates to ensure they are within the bounds of the grid.
+    /// </summary>
+    /// <param name="x">Sample x-coordinate.</param>
+    /// <param name="y">Sample y-coordinate.</param>
+    /// <returns>The wrapped sample coordinates.</returns>
+    private (double X, double Y) WrapSample(double x, double y) => (
+            Mod((int)Math.Floor(x), (int)Width) + (x - Math.Floor(x)),
+            Mod((int)Math.Floor(y), (int)Height) + (y - Math.Floor(y))
+        );
+
+    /// <summary>
+    /// Converts sample coordinates to grid cell coordinates, wrapping the sample.
+    /// </summary>
+    /// <param name="x">Sample x-coordinate.</param>
+    /// <param name="y">Sample y-coordinate.</param>
+    /// <returns>The grid cell coordinates.</returns>
+    private (int X, int Y) SampleToVoxel(double x, double y)
+    {
+        var wrapped = WrapSample(x, y);
+
+        return (
+            Mod((int)(wrapped.X / GridWidth), VoxelCountX - 1),
+            Mod((int)(wrapped.Y / GridHeight), VoxelCountY - 1)
+        );
+    }
+
+    /// <summary>
+    /// Wraps the grid cell coordinates to ensure they are within the bounds of the grid.
+    /// </summary>
+    /// <param name="x">Grid cell x-coordinate.</param>
+    /// <param name="y">Grid cell y-coordinate.</param>
+    /// <returns>The wrapped grid cell coordinates.</returns>
+    private (int X, int Y) WrapVoxel(int x, int y) => (
+            Mod(x, VoxelCountX),
+            Mod(y, VoxelCountY)
+        );
+
+    /// <inheritdoc/>
+    public void Add(double x, double y)
+    {
+        var sample = WrapSample(x, y);
+        var voxel = SampleToVoxel(sample.X, sample.Y);
+
+        _samples[voxel] = sample;
+    }
+
+    /// <inheritdoc/>
+    public bool Occupied(double x, double y) => _samples.ContainsKey(SampleToVoxel(x, y));
+
+    /// <param name="distance">The Manhattan distance to search for neighbours.</param>
+    /// <inheritdoc/>
+    public IEnumerable<Neighbour> Neighbours(
+        double x,
+        double y,
+        double distance)
+    {
+        // Wrap the sample and calculate voxel coordinates.
+        var sample = WrapSample(x, y);
+        var voxel = SampleToVoxel(sample.X, sample.Y);
+
+        // Calculate the limits of the search area in voxel space.
+        var voxelDistanceX = (int)Math.Ceiling(distance / GridWidth);
+        var voxelDistanceY = (int)Math.Ceiling(distance / GridHeight);
+
+        // Iterate over the neighbouring voxels within the distance.
+        for (var dx = -voxelDistanceX; dx <= voxelDistanceX; dx++)
+        {
+            for (var dy = -voxelDistanceY; dy <= voxelDistanceY; dy++)
+            {
+                // Calculate the neighbour voxel.
+                var neighbourVoxel = WrapVoxel(
+                    voxel.X + dx,
+                    voxel.Y + dy);
+
+                // If there's no sample in the neighbour voxel, skip to the next iteration.
+                if (!_samples.TryGetValue(neighbourVoxel, out var neighbour))
+                    continue;
+
+                // Calculate the wrapped distances in both x and y directions.
+                var distanceX = Math.Abs(neighbour.X - sample.X);
+                var distanceY = Math.Abs(neighbour.Y - sample.Y);
+
+                distanceX = Math.Min(distanceX, Width - distanceX);
+                distanceY = Math.Min(distanceY, Height - distanceY);
+
+                var distanceSquared =
+                    distanceX * distanceX +
+                    distanceY * distanceY;
+
+                // Return the neighbour sample.
+                yield return new Neighbour(
+                    neighbour.X,
+                    neighbour.Y,
+                    distanceSquared);
+            }
+        }
+    }
+}
