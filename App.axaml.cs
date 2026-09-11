@@ -20,35 +20,36 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // Create the main window and service collection.
         var mainWindow = new MainWindow();
         var services = new ServiceCollection();
 
-        // services.AddTransient<IRenderer, TestRenderer>();
-        services.AddTransient<IRenderer, SolidColourRenderer>();
-        services.AddTransient<IRenderer, VoronoiDistanceRenderer>();
-        services.AddTransient<IRenderer, VoronoiCellRenderer>();
-        services.AddTransient<IRenderer, VoronoiEdgeRenderer>();
-        services.AddTransient<IColourMixer, Models.ColourMixerChannel>();
+        // Register renderers.
+        services.AddSingleton<IRenderer, SolidColourRenderer>();
+        services.AddSingleton<IRenderer, VoronoiDistanceRenderer>();
+        services.AddSingleton<IRenderer, VoronoiCellRenderer>();
+        services.AddSingleton<IRenderer, VoronoiEdgeRenderer>();
 
+        // Register colour mixers.
+        services.AddSingleton<IColourMixer, Models.ColourMixerChannel>();
+
+        // Register the renderer registry and view model.
         services.AddSingleton<RendererRegistry>();
-        services.AddTransient<MainViewModel>();
-
+        services.AddSingleton<MainViewModel>();
         services.AddSingleton<IBitmapSaveService>(new BitmapSaveService(mainWindow));
 
+        // Build the service provider.
         _services = services.BuildServiceProvider();
 
+        // Set the main window's data context.
         mainWindow.DataContext = _services.GetRequiredService<MainViewModel>();
 
+        // Set the main window as the application's main window.
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = mainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();
-
-        if (Current is { } app)
-        {
-            app.RequestedThemeVariant = ThemeVariant.Light;
-        }
     }
 }
