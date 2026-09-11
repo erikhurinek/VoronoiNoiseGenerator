@@ -11,8 +11,7 @@
             Grid.Column="0"
             Content="Factor: "
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            Margin="0,0,5,0" />
+            VerticalAlignment="Center" />
         <TextBox
             Grid.Row="0"
             Grid.Column="1"

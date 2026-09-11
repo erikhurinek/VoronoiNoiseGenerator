@@ -6,6 +6,7 @@ using VoronoiNoiseGenerator.Views;
 
 using Microsoft.Extensions.DependencyInjection;
 using VoronoiNoiseGenerator.Models;
+using Avalonia.Styling;
 
 namespace VoronoiNoiseGenerator;
 
@@ -23,10 +24,10 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         // services.AddTransient<IRenderer, TestRenderer>();
+        services.AddTransient<IRenderer, SolidColourRenderer>();
         services.AddTransient<IRenderer, VoronoiDistanceRenderer>();
         services.AddTransient<IRenderer, VoronoiCellRenderer>();
         services.AddTransient<IRenderer, VoronoiEdgeRenderer>();
-        services.AddTransient<IRenderer, VoronoiTrueEdgeRenderer>();
         services.AddTransient<IColourMixer, Models.ColourMixerChannel>();
 
         services.AddSingleton<RendererRegistry>();
@@ -44,5 +45,10 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+
+        if (Current is { } app)
+        {
+            app.RequestedThemeVariant = ThemeVariant.Light;
+        }
     }
 }

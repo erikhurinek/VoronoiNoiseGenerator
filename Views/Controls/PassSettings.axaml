@@ -9,40 +9,41 @@
         <DataTemplate x:DataType="models:VoronoiRendererSettings">
             <views:VoronoiRendererSettings />
         </DataTemplate>
-        <DataTemplate x:DataType="models:TestRendererSettings">
-        </DataTemplate>
         <DataTemplate x:DataType="models:ColourMixerChannel">
             <views:ColourMixerChannel />
+        </DataTemplate>
+        <DataTemplate x:DataType="models:SolidColourRendererSettings">
+            <views:SolidColourRendererSettings />
         </DataTemplate>
     </UserControl.DataTemplates>
     <Expander IsExpanded="True" Theme="{StaticResource MinimalExpander}">
         <Expander.Header>
-            <Grid HorizontalAlignment="Stretch">
+            <Grid RowSpacing="5" ColumnSpacing="5" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableRenderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,5,5"/>
+                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableRenderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                 <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
             </Grid>
         </Expander.Header>
-        <StackPanel Orientation="Vertical">
-            <Grid >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Content="X:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding X, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-                <Label Grid.Column="2" Grid.Row="0" Content="Y:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-            </Grid>
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <!-- <Grid >
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="0" Content="X:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding X, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+            <Label Grid.Column="2" Grid.Row="0" Content="Y:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
+            </Grid> -->
             <Expander IsExpanded="True" HorizontalAlignment="Stretch" Theme="{StaticResource MinimalExpander}">
                 <Expander.Header>
                     <Grid ColumnDefinitions="Auto,*">
@@ -59,8 +60,8 @@
                         <Separator Grid.Column="1" />
                     </Grid>
                 </Expander.Header>
-                <StackPanel Orientation="Vertical">
-                    <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixer, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,0,5"/>
+                <StackPanel Orientation="Vertical" Spacing="5">
+                    <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixer, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                     <ContentControl Content="{Binding ColourMixer, Mode=OneWay}" />
                 </StackPanel>
             </Expander>

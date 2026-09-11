@@ -54,7 +54,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
 
             // Calculate and set the intensity.
             double intensity = Math.Min(minSample.Distance / rendererSettings.Radius, 1.0);
-            return new Colour(intensity, intensity, intensity, 1.0);
+            return new Colour(intensity, intensity, intensity, intensity);
         });
     }
 }

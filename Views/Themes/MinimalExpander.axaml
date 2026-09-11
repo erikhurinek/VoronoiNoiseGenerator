@@ -44,7 +44,8 @@
                         Content="{TemplateBinding Header}"
                         ContentTemplate="{TemplateBinding HeaderTemplate}"
                         BorderThickness="0"
-                        Padding="0" />
+                        Padding="0"
+                        Margin="0" />
 
                     <!-- Content -->
                     <Border

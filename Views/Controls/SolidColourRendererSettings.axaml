@@ -1,0 +1,28 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:VoronoiNoiseGenerator.Models"
+    xmlns:views="using:VoronoiNoiseGenerator.Views"
+    x:Class="VoronoiNoiseGenerator.Views.SolidColourRendererSettings"
+    x:DataType="models:SolidColourRendererSettings">
+    <Grid RowSpacing="5" ColumnSpacing="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- <RowDefinition Height="Auto" /> -->
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Column="0" Text="{Binding R, Mode=TwoWay, StringFormat={}{0:0.0}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Text="{Binding G, Mode=TwoWay, StringFormat={}{0:0.0}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="2" Text="{Binding B, Mode=TwoWay, StringFormat={}{0:0.0}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="3" Text="{Binding A, Mode=TwoWay, StringFormat={}{0:0.0}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+
+        <!-- <Label Grid.Column="0" Grid.Row="1" Content="Hex: " HorizontalAlignment="Right" VerticalAlignment="Center" /> -->
+        <!-- <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding ColourHex, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" /> -->
+    </Grid>
+</UserControl>

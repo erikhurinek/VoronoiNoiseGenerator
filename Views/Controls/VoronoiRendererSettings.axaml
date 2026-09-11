@@ -5,7 +5,7 @@
     xmlns:views="using:VoronoiNoiseGenerator.Views"
     x:Class="VoronoiNoiseGenerator.Views.VoronoiRendererSettings"
     x:DataType="models:VoronoiRendererSettings">
-    <Grid>
+    <Grid RowSpacing="5" ColumnSpacing="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -17,15 +17,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Content="Radius:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Radius, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <Label Grid.Column="0" Grid.Row="1" Content="Samples:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding MaxSamples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <Label Grid.Column="0" Grid.Row="2" Content="Subsamples:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Subsamples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <Label Grid.Column="0" Grid.Row="3" Content="Seed:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Seed, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <Label Grid.Column="0" Grid.Row="4" Content="Wrap:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-        <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Wrap, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,5" />
+        <Label Grid.Column="0" Grid.Row="0" Content="Radius:" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Radius, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <Label Grid.Column="0" Grid.Row="1" Content="Samples:" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding MaxSamples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <Label Grid.Column="0" Grid.Row="2" Content="Subsamples:" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Subsamples, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <Label Grid.Column="0" Grid.Row="3" Content="Seed:" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Seed, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <Label Grid.Column="0" Grid.Row="4" Content="Wrap:" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Wrap, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" />
     </Grid>
 </UserControl>

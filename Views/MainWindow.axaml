@@ -21,7 +21,7 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Grid Margin="5">
+    <Grid Margin="5" RowSpacing="5" ColumnSpacing="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="*" />
@@ -48,29 +48,25 @@
                     Grid.Column="0"
                     Content="W:"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,5" />
+                    VerticalAlignment="Center" />
 
                 <TextBox
                     Grid.Column="1"
                     Text="{Binding ImageWidth, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,5" />
+                    VerticalAlignment="Center" />
 
                 <Label
                     Grid.Column="2"
                     Content="H:"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,5" />
+                    VerticalAlignment="Center" />
 
                 <TextBox
                     Grid.Column="3"
                     Text="{Binding ImageHeight, Mode=TwoWay}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,5" />
+                    VerticalAlignment="Center" />
             </Grid>
 
             <!-- Render passes -->
@@ -130,12 +126,19 @@
         </Grid>
 
         <!-- Image -->
-        <Image
-            x:Name="imgDisplayImage"
+        <ContentControl
             Grid.Column="1"
-            Source="{Binding DisplayImage}"
+            Background="White"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Stretch="Uniform" />
+            VerticalAlignment="Top">
+            <Image
+                x:Name="imgDisplayImage"
+                Grid.Column="1"
+                Source="{Binding DisplayImage}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Stretch="Uniform"
+                />
+        </ContentControl>
     </Grid>
 </Window>

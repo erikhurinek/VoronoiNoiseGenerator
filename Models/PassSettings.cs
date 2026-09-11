@@ -55,18 +55,6 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     public partial bool IsEnabled { get; set; } = true;
 
     /// <summary>
-    /// The X offset for rendering this pass.
-    /// </summary>
-    [ObservableProperty]
-    public partial int X { get; set; } = 0;
-
-    /// <summary>
-    /// The Y offset for rendering this pass.
-    /// </summary>
-    [ObservableProperty]
-    public partial int Y { get; set; } = 0;
-
-    /// <summary>
     /// Called when the selected renderer changes.
     /// </summary>
     /// <param name="value">The new selected renderer.</param>
