@@ -7,10 +7,10 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// A renderer for the Euclidean distance to the nearest sample.
 /// </summary>
-public class VoronoiDistanceRenderer : IRenderer
+public sealed class VoronoiDistanceRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Voronoi Distance", typeof(VoronoiDistanceRenderer), typeof(VoronoiRendererSettings));
+    public RendererDescriptor Descriptor => new("Voronoi Distance", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(WriteableBitmap target, PassSettings settings)
@@ -50,7 +50,7 @@ public class VoronoiDistanceRenderer : IRenderer
                 return Colour.Black;
 
             // Get the nearest sample.
-            Neighbour minSample = neighbours.OrderBy(n => n.Distance).First();
+            Neighbour minSample = neighbours.OrderBy(n => n.DistanceSquared).First();
 
             // Calculate and set the intensity.
             double intensity = Math.Min(minSample.Distance / rendererSettings.Radius, 1.0);

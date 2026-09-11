@@ -112,6 +112,9 @@ public sealed class WrappedSampleGrid(
         var voxelDistanceX = (int)Math.Ceiling(distance / GridWidth);
         var voxelDistanceY = (int)Math.Ceiling(distance / GridHeight);
 
+        var halfWidth = Width / 2.0;
+        var halfHeight = Height / 2.0;
+
         // Iterate over the neighbouring voxels within the distance.
         for (var dx = -voxelDistanceX; dx <= voxelDistanceX; dx++)
         {
@@ -126,21 +129,33 @@ public sealed class WrappedSampleGrid(
                 if (!_samples.TryGetValue(neighbourVoxel, out var neighbour))
                     continue;
 
-                // Calculate the wrapped distances in both x and y directions.
-                var distanceX = Math.Abs(neighbour.X - sample.X);
-                var distanceY = Math.Abs(neighbour.Y - sample.Y);
+                // Unwrap the neighbour coordinates so they are the closest periodic
+                // copy to the sample.
+                var unwrappedX = neighbour.X;
+                var unwrappedY = neighbour.Y;
 
-                distanceX = Math.Min(distanceX, Width - distanceX);
-                distanceY = Math.Min(distanceY, Height - distanceY);
+                if (unwrappedX - sample.X > halfWidth)
+                    unwrappedX -= Width;
+                else if (sample.X - unwrappedX > halfWidth)
+                    unwrappedX += Width;
+
+                if (unwrappedY - sample.Y > halfHeight)
+                    unwrappedY -= Height;
+                else if (sample.Y - unwrappedY > halfHeight)
+                    unwrappedY += Height;
+
+                // Calculate the distances using the unwrapped coordinates.
+                var distanceX = Math.Abs(unwrappedX - sample.X);
+                var distanceY = Math.Abs(unwrappedY - sample.Y);
 
                 var distanceSquared =
                     distanceX * distanceX +
                     distanceY * distanceY;
 
-                // Return the neighbour sample.
+                // Return the unwrapped neighbour sample.
                 yield return new Neighbour(
-                    neighbour.X,
-                    neighbour.Y,
+                    unwrappedX,
+                    unwrappedY,
                     distanceSquared);
             }
         }

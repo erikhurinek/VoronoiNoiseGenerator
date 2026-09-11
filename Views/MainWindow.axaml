@@ -27,30 +27,115 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0">
-            <Grid>
+        <!-- Left panel -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Image settings -->
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Column="0"
+                    Content="W:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,0,5" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Text="{Binding ImageWidth, Mode=TwoWay}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Margin="0,0,0,5" />
+
+                <Label
+                    Grid.Column="2"
+                    Content="H:"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,0,5" />
+
+                <TextBox
+                    Grid.Column="3"
+                    Text="{Binding ImageHeight, Mode=TwoWay}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Margin="0,0,0,5" />
+            </Grid>
+
+            <!-- Render passes -->
+            <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Grid.Column="0" Grid.Row="0" Content="W:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
-                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding ImageWidth, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-                <Label Grid.Column="2" Grid.Row="0" Content="H:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5" />
-                <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding ImageHeight, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-            </Grid>
-            <Separator Height="1" />
-            <ItemsControl x:Name="icRenderPasses" ItemsSource="{Binding Passes}" />
-            <Separator Height="1" />
-            <Button x:Name="btRender" Content="Render" HorizontalAlignment="Center" Padding="30,5" Command="{Binding RenderCommand}" />
-            <Button x:Name="btAddPass" Content="Add Pass" HorizontalAlignment="Center" Padding="30,5" Command="{Binding AddPassCommand}" />
-        </StackPanel>
 
-        <Image x:Name="imgDisplayImage" Grid.Column="1" Source="{Binding DisplayImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None" />
+                <Separator Grid.Row="0" Height="1" />
+
+                <ScrollViewer
+                    Grid.Row="1"
+                    VerticalScrollBarVisibility="Auto">
+                    <ItemsControl
+                        x:Name="icRenderPasses"
+                        ItemsSource="{Binding Passes}"
+                        >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="10" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Buttons -->
+            <StackPanel
+                Grid.Row="2"
+                Orientation="Vertical">
+
+                <Separator Height="1" />
+
+                <Button
+                    x:Name="btRender"
+                    Content="Render"
+                    HorizontalAlignment="Center"
+                    Padding="30,5"
+                    Command="{Binding RenderCommand}" />
+
+                <Button
+                    x:Name="btAddPass"
+                    Content="Add Pass"
+                    HorizontalAlignment="Center"
+                    Padding="30,5"
+                    Command="{Binding AddPassCommand}" />
+
+                <Button
+                    x:Name="btSaveImage"
+                    Content="Save Image"
+                    HorizontalAlignment="Center"
+                    Padding="30,5"
+                    Command="{Binding SaveImageCommand}" />
+                <TextBlock Text="{Binding AppInfo}" HorizontalAlignment="Center" Margin="0,5,0,0" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Image -->
+        <Image
+            x:Name="imgDisplayImage"
+            Grid.Column="1"
+            Source="{Binding DisplayImage}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Stretch="Uniform" />
     </Grid>
 </Window>

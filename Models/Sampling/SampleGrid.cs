@@ -10,7 +10,7 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="height">The height of the grid in sample space.</param>
 /// <param name="gridWidth">The width of each grid cell in sample space.</param>
 /// <param name="gridHeight">The height of each grid cell in sample space.</param>
-public class SampleGrid(double width, double height, int gridWidth, int gridHeight) : ISampleGrid
+public sealed class SampleGrid(double width, double height, int gridWidth, int gridHeight) : ISampleGrid
 {
     /// <summary>
     /// A dictionary that maps grid cell coordinates to the sample stored in that cell.

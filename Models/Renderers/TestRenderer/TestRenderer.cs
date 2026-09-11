@@ -2,10 +2,15 @@ using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;
 
-public class TestRenderer : IRenderer
+/// <summary>
+/// A renderer that generates a test pattern.
+/// </summary>
+public sealed class TestRenderer : IRenderer
 {
+    /// <inheritdoc/>
     public RendererDescriptor Descriptor => new("Test Renderer", typeof(TestRenderer), typeof(TestRendererSettings));
 
+    /// <inheritdoc/>
     public void Render(WriteableBitmap bitmap, PassSettings settings)
     {
         using var framebuffer = bitmap.Lock();
@@ -24,8 +29,8 @@ public class TestRenderer : IRenderer
 
                     pixel[0] = (byte)(x * 255 / framebuffer.Size.Height);
                     pixel[1] = (byte)(y * 255 / framebuffer.Size.Width);
-                    pixel[2] = 0;   // B
-                    pixel[3] = 255; // A
+                    pixel[2] = 0;
+                    pixel[3] = 255;
                 }
             }
         }

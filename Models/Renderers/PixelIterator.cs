@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;
@@ -25,7 +26,7 @@ public static class BitmapWriter
             byte* pixels = (byte*)framebuffer.Address;
 
             // Iterate over each pixel in the bitmap.
-            for (int y = 0; y < framebuffer.Size.Height; y++)
+            Parallel.For(0, framebuffer.Size.Height, y =>
             {
                 // Start address of the current row.
                 byte* row = pixels + y * framebuffer.RowBytes;
@@ -46,7 +47,7 @@ public static class BitmapWriter
                     pixel[2] = b;
                     pixel[3] = a;
                 }
-            }
+            });
         }
     }
 }

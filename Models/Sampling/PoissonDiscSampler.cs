@@ -14,7 +14,7 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="subsamples">The number of candidate samples to generate for each active sample.</param>
 /// <param name="wrapped">Indicates whether the sampling area is wrapped (toroidal).</param>
 /// <param name="seed">The random seed.</param>
-public class PoissonDiscSampler(
+public sealed class PoissonDiscSampler(
     double width,
     double height,
     double radius,

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -16,6 +17,7 @@ public partial class MainViewModel : ViewModelBase
     private IEnumerable<RendererDescriptor> _descriptors;
     private IEnumerable<ColourMixerDescriptor> _colourMixerDescriptors;
     private RendererRegistry _rendererRegistry;
+    private IBitmapSaveService _imageSaveService;
 
     [ObservableProperty]
     public partial ObservableCollection<PassSettings> Passes { get; set; } = new ObservableCollection<PassSettings>();
@@ -32,24 +34,34 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     public partial int ImageHeight { get; set; } = 128;
 
+    public string AppInfo
+        => $"Voronoi Noise Generator - {typeof(AvaloniaObject).Assembly.GetName().Version?.ToString() ?? "Unknown Version"}";
+
     public MainViewModel()
     {
         _renderers = new List<IRenderer>();
         _descriptors = new List<RendererDescriptor>();
         _colourMixerDescriptors = new List<ColourMixerDescriptor>();
+        _imageSaveService = new MockImageSaveService();
         _rendererRegistry = new RendererRegistry();
     }
 
-    public MainViewModel(RendererRegistry rendererFactory, IEnumerable<IRenderer> renderers, IEnumerable<IColourMixer> colourMixers)
+    public MainViewModel(
+        RendererRegistry rendererFactory,
+        IEnumerable<IRenderer> renderers,
+        IEnumerable<IColourMixer> colourMixers,
+        IBitmapSaveService fileSaveService
+    )
     {
         _renderers = renderers;
         _descriptors = _renderers.Select(r => r.Descriptor);
         _colourMixerDescriptors = colourMixers.Select(c => c.Descriptor);
+        _imageSaveService = fileSaveService;
         _rendererRegistry = rendererFactory;
     }
 
     [RelayCommand]
-    public void Render()
+    private void Render()
     {
         var bitmap = new WriteableBitmap(
             new PixelSize(ImageWidth, ImageHeight),
@@ -77,8 +89,17 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void AddPass()
+    private void AddPass()
     {
         Passes.Add(new PassSettings(_descriptors, _colourMixerDescriptors));
+    }
+
+    [RelayCommand]
+    private async Task SaveImage()
+    {
+        if (DisplayImage is null)
+            return;
+
+        await _imageSaveService.SaveFileAsync(DisplayImage);
     }
 }

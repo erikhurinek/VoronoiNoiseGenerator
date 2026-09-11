@@ -3,10 +3,10 @@ using System;
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// Represents a neighbour sample with its coordinates and distance from another reference sample.
+/// Represents a neighbour sample with its coordinates and distance from another reference point.
 /// </summary>
-/// <param name="x">The x-coordinate of the neighbour sample.</param>
-/// <param name="y">The y-coordinate of the neighbour sample.</param>
+/// <param name="x">The x-coordinate of this neighbour sample.</param>
+/// <param name="y">The y-coordinate of this neighbour sample.</param>
 /// <param name="distanceSquared">The squared distance from the reference sample.</param>
 public readonly struct Neighbour(double x, double y, double distanceSquared)
 {

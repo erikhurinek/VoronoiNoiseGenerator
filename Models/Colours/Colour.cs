@@ -48,9 +48,18 @@ public readonly struct Colour(double red, double green, double blue, double alph
     public static Colour FromByteRGBA(byte r, byte g, byte b, byte a) =>
         new(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
 
+    /// <summary>
+    /// A fully transparent color (0,0,0,0).
+    /// </summary>
     public static readonly Colour Transparent = new(0, 0, 0, 0);
 
+    /// <summary>
+    /// Black color (0,0,0,1).
+    /// </summary>
     public static readonly Colour Black = new(0, 0, 0, 1);
 
+    /// <summary>
+    /// White color (1,1,1,1).
+    /// </summary>
     public static readonly Colour White = new(1, 1, 1, 1);
 }

@@ -7,7 +7,7 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// Associates a renderer type with its implementation.
 /// </summary>
-public class RendererRegistry
+public sealed class RendererRegistry
 {
     /// <summary>
     /// Maps renderer types to their corresponding renderer instances.
