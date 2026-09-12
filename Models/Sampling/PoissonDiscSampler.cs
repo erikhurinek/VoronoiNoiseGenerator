@@ -86,8 +86,11 @@ public sealed class PoissonDiscSampler(
 
         Random random = new(Seed);
 
-        // Randomly select the initial sample.
-        (double, double) initialSample = (random.NextDouble() * Width, random.NextDouble() * Height);
+        // Randomly select the initial sample in the centremost grid cell.
+        (double, double) initialSample = (
+            (Width / 2) + (random.NextDouble() - 0.5) * gridSize,
+            (Height / 2) + (random.NextDouble() - 0.5) * gridSize
+        );
         grid.Add(initialSample.Item1, initialSample.Item2);
 
         // Use a queue to track active samples for generating candidates.

@@ -21,6 +21,14 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+R" Command="{Binding RenderCommand}" />
+        <KeyBinding Gesture="F5" Command="{Binding RenderCommand}" />
+        <KeyBinding Gesture="Add" Command="{Binding AddPassCommand}" />
+        <KeyBinding Gesture="Subtract" Command="{Binding RemoveHoveredPassCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding ExportRenderResultCommand}" />
+    </Window.KeyBindings>
+
     <Grid Margin="5" RowSpacing="5" ColumnSpacing="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
@@ -117,7 +125,7 @@
                     Content="Save Image"
                     HorizontalAlignment="Center"
                     Padding="30,5"
-                    Command="{Binding SaveImageCommand}" />
+                    Command="{Binding ExportRenderResultCommand}" />
                 <TextBlock Text="{Binding AppInfo}" HorizontalAlignment="Center" Margin="0,5,0,0" />
             </StackPanel>
         </Grid>

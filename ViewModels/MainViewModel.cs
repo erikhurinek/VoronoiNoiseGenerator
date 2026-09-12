@@ -18,6 +18,11 @@ namespace VoronoiNoiseGenerator.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     /// <summary>
+    /// Sensible limit on the number of render passes
+    /// </summary>
+    const int MAX_RENDER_PASSES = 8;
+
+    /// <summary>
     /// The list of available renderer descriptors.
     /// </summary>
     private IEnumerable<RendererDescriptor> _descriptors;
@@ -125,56 +130,63 @@ public partial class MainViewModel : ViewModelBase
     /// Renders the texture based on the current pass settings and updates the <see cref="DisplayRenderResult"/> property.
     /// </summary>
     [RelayCommand]
-    private void Render()
+    private async Task Render()
     {
-        // Create a new bitmap.
-        var bitmap = new WriteableBitmap(
-            new PixelSize(ImageWidth, ImageHeight),
-            new Vector(96, 96),
-            PixelFormat.Rgba8888,
-            AlphaFormat.Opaque
-        );
-
-        // Iteratively apply the passes.
-        foreach (PassSettings pass in Passes)
+        // Render the bitmap in the background.
+        var bitmap = await Task.Run(() =>
         {
-            // Skip disabled passes.
-            if (!pass.IsEnabled)
-                continue;
+            // Create a new bitmap.
+            var bitmap = new WriteableBitmap(
+                new PixelSize(ImageWidth, ImageHeight),
+                new Vector(96, 96),
+                PixelFormat.Rgba8888,
+                AlphaFormat.Opaque
+            );
 
-            // Get the renderer descriptor.
-            var descriptor = pass.SelectedRendererDescriptor;
+            // Iteratively apply the passes.
+            foreach (PassSettings pass in Passes)
+            {
+                // Skip disabled passes.
+                if (!pass.IsEnabled)
+                    continue;
 
-            // Skip the pass if no renderer is selected.
-            if (descriptor is null)
-                continue;
+                // Get the renderer descriptor.
+                var descriptor = pass.SelectedRendererDescriptor;
 
-            // Get the required renderer instance.
-            IRenderer renderer = _rendererRegistry.Get(descriptor.RendererType);
+                // Skip the pass if no renderer is selected.
+                if (descriptor is null)
+                    continue;
 
-            // Modify the bitmap.
-            renderer.Render(bitmap, pass);
-        }
+                // Get the required renderer instance.
+                IRenderer renderer = _rendererRegistry.Get(descriptor.RendererType);
+
+                // Modify the bitmap.
+                renderer.Render(bitmap, pass);
+            }
+
+            return bitmap;
+        });
 
         // Display the bitmap.
         RenderResult = bitmap;
     }
 
     /// <summary>
-    /// Adds a new pass to the list of passes. <br/>
+    /// Adds a new pass to the list of passes.
     /// </summary>
     [RelayCommand]
     private void AddPass()
     {
-        Passes.Add(new PassSettings(_descriptors, _colourMixerDescriptors));
+        if (Passes.Count < MAX_RENDER_PASSES)
+            Passes.Add(new PassSettings(_descriptors, _colourMixerDescriptors));
     }
 
     /// <summary>
-    /// Open a file dialog to save the currently displayed image. <br/>
+    /// Open a file dialog to save the currently displayed image.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     [RelayCommand]
-    private async Task SaveImage()
+    private async Task ExportRenderResult()
     {
         if (RenderResult is null)
             throw new InvalidOperationException("No rendered texture available to save.");
@@ -183,12 +195,23 @@ public partial class MainViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Removes the specified pass from the list of passes. <br/>
+    /// Removes the specified pass from the list of passes.
     /// </summary>
     /// <param name="pass">The pass to remove.</param>
     [RelayCommand]
     private void RemovePass(PassSettings pass)
     {
         Passes.Remove(pass);
+    }
+
+    /// <summary>
+    /// Removes the pass that is currently hovered over in the UI.
+    /// </summary>
+    [RelayCommand]
+    private void RemoveHoveredPass()
+    {
+        PassSettings? hovered = Passes.FirstOrDefault(p => p.IsHovered);
+        if (hovered is not null)
+            Passes.Remove(hovered);
     }
 }

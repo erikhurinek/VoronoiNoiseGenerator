@@ -53,6 +53,13 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     [ObservableProperty]
     public partial bool IsEnabled { get; set; } = true;
 
+
+    /// <summary>
+    /// Whether this pass is currently hovered over in the UI by the cursor.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsHovered { get; set; } = false;
+
     /// <summary>
     /// Called when the selected renderer changes.
     /// </summary>

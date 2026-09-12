@@ -10,5 +10,17 @@ public partial class PassSettings : UserControl
     public PassSettings()
     {
         InitializeComponent();
+
+        PointerEntered += (_, _) =>
+        {
+            if (DataContext is Models.PassSettings pass)
+                pass.IsHovered = true;
+        };
+
+        PointerExited += (_, _) =>
+        {
+            if (DataContext is Models.PassSettings pass)
+                pass.IsHovered = false;
+        };
     }
 }

@@ -14,10 +14,11 @@ This is a work in progress.
 I plan to improve the UI to look less cluttered, and add more features.
 
 ## Types of Noise
-This applications supports three types:
+This applications supports four types:
 - **Distance**: The distance to the nearest sample.
 - **Cell**: The index of the nearest sample.
 - **Edge**: The distance to the nearest edge between samples.
+- **Position**: The position of the nearest sample, remapped from [-1,2] to [0,1].
 
 ---
 

@@ -29,6 +29,7 @@ public partial class App : Application
         services.AddSingleton<IRenderer, VoronoiDistanceRenderer>();
         services.AddSingleton<IRenderer, VoronoiCellRenderer>();
         services.AddSingleton<IRenderer, VoronoiEdgeRenderer>();
+        services.AddSingleton<IRenderer, VoronoiPositionRenderer>();
 
         // Register colour mixers.
         services.AddSingleton<IColourMixer, Models.ColourMixerChannel>();
