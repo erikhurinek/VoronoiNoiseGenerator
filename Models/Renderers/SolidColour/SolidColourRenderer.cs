@@ -22,6 +22,6 @@ public sealed class SolidColourRenderer : IRenderer
             ?? throw new ArgumentException("Invalid renderer settings for SolidColourRenderer.");
 
         // Fill the bitmap with the solid colour.
-        BitmapWriter.Write(target, colourMixer, (x, y) => rendererSettings.Colour);
+        BitmapIterator.Iterate(target, colourMixer, (x, y) => rendererSettings.Colour);
     }
 }

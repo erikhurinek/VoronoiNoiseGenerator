@@ -18,7 +18,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude
-                    Source="avares://VoronoiNoiseGenerator/Views/Themes/MinimalExpander.axaml" />
+                    Source="avares://VoronoiNoiseGenerator/Views/Themes/CustomThemes.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

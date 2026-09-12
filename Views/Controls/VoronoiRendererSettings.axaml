@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:VoronoiNoiseGenerator.Models"
-    xmlns:views="using:VoronoiNoiseGenerator.Views"
     x:Class="VoronoiNoiseGenerator.Views.VoronoiRendererSettings"
     x:DataType="models:VoronoiRendererSettings">
     <Grid RowSpacing="5" ColumnSpacing="5">

@@ -27,7 +27,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Left panel -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -35,7 +34,6 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Image settings -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -94,7 +92,6 @@
                 </ScrollViewer>
             </Grid>
 
-            <!-- Buttons -->
             <StackPanel
                 Grid.Row="2"
                 Orientation="Vertical">
@@ -125,16 +122,15 @@
             </StackPanel>
         </Grid>
 
-        <!-- Image -->
         <ContentControl
             Grid.Column="1"
             Background="White"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <Image
-                x:Name="imgDisplayImage"
+                x:Name="imgRenderResult"
                 Grid.Column="1"
-                Source="{Binding DisplayImage}"
+                Source="{Binding DisplayRenderResult}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Stretch="Uniform"

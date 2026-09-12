@@ -10,14 +10,14 @@ namespace VoronoiNoiseGenerator.Models;
 public interface IBitmapSaveService
 {
     /// <summary>
-    /// Saves a bitmap to a file, using default options.
+    /// Saves a bitmap to a file.
     /// </summary>
     /// <param name="bitmap">The bitmap to save.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveFileAsync(Bitmap bitmap);
 
     /// <summary>
-    /// Saves a bitmap to a file, using the provided file picker options.<br/>
+    /// Saves a bitmap to a file, using custom file picker options.
     /// </summary>
     /// <param name="options">The file picker options to use when saving the bitmap.</param>
     /// <inheritdoc cref="SaveFileAsync(Bitmap)"/>

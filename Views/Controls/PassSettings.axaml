@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:VoronoiNoiseGenerator.Models"
     xmlns:views="using:VoronoiNoiseGenerator.Views"
+    xmlns:vm="using:VoronoiNoiseGenerator.ViewModels"
     x:Class="VoronoiNoiseGenerator.Views.PassSettings"
     x:DataType="models:PassSettings">
     <UserControl.DataTemplates>
@@ -22,28 +23,20 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableRenderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" HorizontalAlignment="Stretch" />
+                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableRenderers}" SelectedItem="{Binding SelectedRendererDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                 <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
+                <Button
+                    Grid.Column="2"
+                    Content="✕"
+                    VerticalAlignment="Center"
+                    Command="{Binding $parent[ItemsControl].((vm:MainViewModel)DataContext).RemovePassCommand}"
+                    CommandParameter="{Binding}"
+                    Theme="{StaticResource MinimalIconButton}" />
             </Grid>
         </Expander.Header>
         <StackPanel Orientation="Vertical" Spacing="5">
-            <!-- <Grid >
-            <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" Content="X:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding X, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-            <Label Grid.Column="2" Grid.Row="0" Content="Y:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="3" Grid.Row="0" Text="{Binding Y, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,5" />
-            </Grid> -->
             <Expander IsExpanded="True" HorizontalAlignment="Stretch" Theme="{StaticResource MinimalExpander}">
                 <Expander.Header>
                     <Grid ColumnDefinitions="Auto,*">
@@ -61,7 +54,7 @@
                     </Grid>
                 </Expander.Header>
                 <StackPanel Orientation="Vertical" Spacing="5">
-                    <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixer, Mode=TwoWay}" HorizontalAlignment="Stretch" />
+                    <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixerDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" />
                     <ContentControl Content="{Binding ColourMixer, Mode=OneWay}" />
                 </StackPanel>
             </Expander>

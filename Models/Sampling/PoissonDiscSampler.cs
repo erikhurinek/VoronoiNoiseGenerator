@@ -5,23 +5,23 @@ using System.Linq;
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// A sampler that generates samples using the Poisson Disc Sampling algorithm.
+/// A sampler that generates samples using the Poisson disc sampling algorithm.
 /// </summary>
 /// <param name="width">The width of the sampling area.</param>
 /// <param name="height">The height of the sampling area.</param>
 /// <param name="radius">The minimum distance between samples.</param>
 /// <param name="maxSamples">The maximum number of samples to generate.</param>
 /// <param name="subsamples">The number of candidate samples to generate for each active sample.</param>
-/// <param name="wrapped">Indicates whether the sampling area is wrapped (toroidal).</param>
 /// <param name="seed">The random seed.</param>
+/// <param name="wrapBehaviour">What properties of the samples should be wrapped.</param>
 public sealed class PoissonDiscSampler(
     double width,
     double height,
     double radius,
     int maxSamples,
     int subsamples,
-    bool wrapped,
-    int seed
+    int seed,
+    WrapBehaviour wrapBehaviour
 ) : ISampler
 {
     /// <summary>
@@ -50,14 +50,20 @@ public sealed class PoissonDiscSampler(
     public int Subsamples { get; } = subsamples;
 
     /// <summary>
-    /// Indicates whether the sampling area is wrapped (toroidal).
+    /// The wrap behaviour for the samples.
     /// </summary>
-    public bool Wrapped { get; } = wrapped;
+    public WrapBehaviour WrapBehaviour { get; } = wrapBehaviour;
 
     /// <summary>
     /// The random seed.
     /// </summary>
     public int Seed { get; } = seed;
+
+    /// <inheritdoc cref="PoissonDiscSampler(double, double, double, int, int, int, WrapBehaviour)"/>
+    public PoissonDiscSampler(double width, double height, double radius, int maxSamples, int subsamples, int seed)
+        : this(width, height, radius, maxSamples, subsamples, seed, WrapBehaviour.NoWrap)
+    {
+    }
 
     /// <summary>
     /// Generates a collection of samples based on the sampler's parameters.
@@ -74,9 +80,9 @@ public sealed class PoissonDiscSampler(
         int gridSize = (int)(Radius / Math.Sqrt(2));
 
         // Initialize the appropriate sample grid.
-        ISampleGrid grid = Wrapped
-            ? new WrappedSampleGrid(Width, Height, gridSize, gridSize)
-            : new SampleGrid(Width, Height, gridSize, gridSize);
+        ISampleGrid grid = WrapBehaviour == WrapBehaviour.NoWrap
+            ? new SampleGrid(Width, Height, gridSize, gridSize)
+            : new SampleGridWrapped(Width, Height, gridSize, gridSize, WrapBehaviour);
 
         Random random = new(Seed);
 

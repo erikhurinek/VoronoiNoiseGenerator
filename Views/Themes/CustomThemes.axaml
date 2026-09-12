@@ -1,0 +1,145 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.PreviewWith>
+        <Grid Width="200">
+            <Expander Theme="{StaticResource MinimalExpander}" IsExpanded="True">
+                <Expander.Header>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <TextBlock Grid.Column="0" Text="Header" />
+                        <Separator Grid.Column="1" />
+                        <Button
+                            Grid.Column="2"
+                            Content="✕"
+                            VerticalAlignment="Center"
+                            Theme="{StaticResource MinimalIconButton}" />
+                    </Grid>
+                </Expander.Header>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Item1"/>
+                    <Label Content="Item1"/><Label Content="Item1"/><Label Content="Item1"/>
+                </StackPanel>
+            </Expander>
+        </Grid>
+    </Design.PreviewWith>
+
+    <ControlTheme
+        x:Key="MinimalExpander"
+        TargetType="Expander">
+
+        <ControlTheme.Resources>
+            <Thickness x:Key="ExpanderChevronMargin">0</Thickness>
+        </ControlTheme.Resources>
+
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DockPanel>
+
+                    <!-- Header / chevron -->
+                    <ToggleButton
+                        Name="ExpanderHeader"
+                        DockPanel.Dock="Top"
+                        Theme="{DynamicResource FluentExpanderToggleButtonDownTheme}"
+                        IsEnabled="{TemplateBinding IsEnabled}"
+                        IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
+                        Content="{TemplateBinding Header}"
+                        ContentTemplate="{TemplateBinding HeaderTemplate}"
+                        BorderThickness="0"
+                        Padding="0"
+                        Margin="0" />
+
+                    <!-- Content -->
+                    <Border
+                        Name="ExpanderContent"
+                        IsVisible="{TemplateBinding IsExpanded, Mode=TwoWay}">
+
+                        <ContentPresenter
+                            Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Foreground="{TemplateBinding Foreground}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Padding="5" />
+                    </Border>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:expanded /template/ ToggleButton#ExpanderHeader">
+            <Setter Property="Tag" Value="expanded" />
+        </Style>
+        <Style Selector="^:not(:expanded) /template/ ToggleButton#ExpanderHeader">
+            <Setter Property="Tag" Value="collapsed" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme
+        x:Key="MinimalIconButton"
+        TargetType="Button">
+
+        <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource ExpanderChevronBorderThickness}" />
+        <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForeground}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="Width" Value="{DynamicResource ExpanderChevronButtonSize}" />
+        <Setter Property="Height" Value="{DynamicResource ExpanderChevronButtonSize}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Name="ButtonBackground"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Foreground="{TemplateBinding Foreground}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <!-- PointerOver -->
+        <Style Selector="^:pointerover /template/ Border#ButtonBackground">
+            <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundPointerOver}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushPointerOver}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundPointerOver}" />
+        </Style>
+
+        <!-- Pressed -->
+        <Style Selector="^:pressed /template/ Border#ButtonBackground">
+            <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundPressed}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushPressed}" />
+        </Style>
+        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundPressed}" />
+        </Style>
+
+        <!-- Disabled -->
+        <Style Selector="^:disabled /template/ Border#ButtonBackground">
+            <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushDisabled}" />
+        </Style>
+        <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundDisabled}" />
+        </Style>
+
+    </ControlTheme>
+</ResourceDictionary>

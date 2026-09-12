@@ -24,6 +24,9 @@ public sealed class VoronoiDistanceRenderer : IRenderer
         if (rendererSettings is null)
             throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
+        // It doesn't really matter whether sample coordinates are wrapped or not, since we only care about distance.
+        WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceUnwrapCoordinates : WrapBehaviour.NoWrap;
+
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
             target.PixelSize.Width,
@@ -31,15 +34,15 @@ public sealed class VoronoiDistanceRenderer : IRenderer
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
-            rendererSettings.Wrap,
-            rendererSettings.Seed
+            rendererSettings.Seed,
+            wrapBehaviour
         );
 
         // Generate the samples.
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based on the distance.
-        BitmapWriter.Write(target, colourMixer, (x, y) =>
+        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
         {
             // Get all relevant samples.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);

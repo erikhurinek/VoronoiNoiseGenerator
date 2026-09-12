@@ -11,6 +11,21 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="window">The Avalonia window used to access the storage provider.</param>
 public sealed class BitmapSaveService(Window window) : IBitmapSaveService
 {
+    /// <summary>
+    /// Gets the default file picker options.
+    /// </summary>
+    private static FilePickerSaveOptions DefaultSaveOptions => new()
+    {
+        DefaultExtension = "png",
+        FileTypeChoices = [
+            new FilePickerFileType("PNG Image")
+            {
+                Patterns = ["*.png"]
+            }
+        ],
+        SuggestedFileName = "output.png"
+    };
+
     /// <inheritdoc/>
     public async Task SaveFileAsync(Bitmap bitmap, FilePickerSaveOptions options)
     {
@@ -23,26 +38,13 @@ public sealed class BitmapSaveService(Window window) : IBitmapSaveService
 
         // Save the bitmap.
         await using var stream = await file.OpenWriteAsync();
-        bitmap.Save(stream, new PngBitmapEncoderOptions());
+        bitmap.Save(stream, PngBitmapEncoderOptions.Default);
     }
 
     /// <inheritdoc/>
     public async Task SaveFileAsync(Bitmap bitmap)
     {
-        // Create default options first.
-        var options = new FilePickerSaveOptions
-        {
-            DefaultExtension = "png",
-            FileTypeChoices = [
-                new FilePickerFileType("PNG Image")
-                {
-                    Patterns = ["*.png"]
-                }
-            ],
-            SuggestedFileName = "output.png"
-        };
-
-        // And save.
-        await SaveFileAsync(bitmap, options);
+        // Save with the default options.
+        await SaveFileAsync(bitmap, DefaultSaveOptions);
     }
 }

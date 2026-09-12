@@ -22,7 +22,7 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     /// The currently selected renderer descriptor.
     /// </summary>
     [ObservableProperty]
-    public partial RendererDescriptor? SelectedRenderer { get; set; } = availableRenderers.FirstOrDefault();
+    public partial RendererDescriptor? SelectedRendererDescriptor { get; set; } = availableRenderers.FirstOrDefault();
 
     /// <summary>
     /// The settings specific to the selected renderer.
@@ -36,16 +36,15 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     public IReadOnlyList<ColourMixerDescriptor> AvailableColourMixers { get; } = availableColourMixers.ToList();
 
     /// <summary>
-    /// The currently selected colour mixer.
+    /// The currently selected colour mixer descriptor.
     /// </summary>
     [ObservableProperty]
-    public partial ColourMixerDescriptor? SelectedColourMixer { get; set; } = availableColourMixers.FirstOrDefault();
+    public partial ColourMixerDescriptor? SelectedColourMixerDescriptor { get; set; } = availableColourMixers.FirstOrDefault();
 
     /// <summary>
     /// The currently selected colour mixer instance.
     /// </summary>
-    [ObservableProperty]
-    public partial IColourMixer ColourMixer { get; set; } = CreateColourMixer(availableColourMixers.First())
+    public IColourMixer ColourMixer { get; private set; } = CreateColourMixer(availableColourMixers.First())
         ?? throw new InvalidOperationException($"Could not create an instance of {availableColourMixers.FirstOrDefault()?.MixerType.FullName}.");
 
     /// <summary>
@@ -58,7 +57,7 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     /// Called when the selected renderer changes.
     /// </summary>
     /// <param name="value">The new selected renderer.</param>
-    partial void OnSelectedRendererChanged(RendererDescriptor? value)
+    partial void OnSelectedRendererDescriptorChanged(RendererDescriptor? value)
     {
         if (value is null)
             return;
@@ -80,7 +79,7 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     /// </summary>
     /// <param name="value">The colour mixer descriptor to create an instance for.</param>
     /// <exception cref="InvalidOperationException">Thrown when the colour mixer instance could not be created.</exception>
-    partial void OnSelectedColourMixerChanged(ColourMixerDescriptor? value)
+    partial void OnSelectedColourMixerDescriptorChanged(ColourMixerDescriptor? value)
     {
         if (value is null)
             return;

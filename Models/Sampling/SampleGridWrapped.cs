@@ -4,17 +4,22 @@ using System.Collections.Generic;
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// A sample grid that wraps around at the edges, allowing for toroidal sampling.
+/// A sample grid that handles wrapping around the edges.
 /// </summary>
 /// <param name="width">The width of the grid in sample space.</param>
 /// <param name="height">The height of the grid in sample space.</param>
 /// <param name="gridWidth">The width of each grid cell in sample space.</param>
 /// <param name="gridHeight">The height of each grid cell in sample space.</param>
-public sealed class WrappedSampleGrid(
-    double width,
-    double height,
-    int gridWidth,
-    int gridHeight) : ISampleGrid
+/// <param name="wrapBehaviour">The wrapping behavior for the sample grid.</param>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SampleGridWrapped"/> class.
+/// </remarks>
+/// <param name="width">The width of the grid in sample space.</param>
+/// <param name="height">The height of the grid in sample space.</param>
+/// <param name="gridWidth">The width of each grid cell in sample space.</param>
+/// <param name="gridHeight">The height of each grid cell in sample space.</param>
+/// <param name="wrapBehaviour">The wrapping behavior for the sample grid.</param>
+public sealed class SampleGridWrapped(double width, double height, int gridWidth, int gridHeight, WrapBehaviour wrapBehaviour) : ISampleGrid
 {
     /// <summary>
     /// A dictionary that maps grid cell coordinates to the sample stored in that cell.
@@ -33,11 +38,22 @@ public sealed class WrappedSampleGrid(
     /// <inheritdoc/>
     public int GridHeight { get; } = gridHeight;
 
+    /// <summary>
+    /// The wrapping behavior for the sample grid.
+    /// </summary>
+    public WrapBehaviour WrapBehaviour { get; } = wrapBehaviour;
+
     /// <summary>The number of grid cells in the X direction.</summary>
     private int VoxelCountX => (int)Math.Ceiling(Width / GridWidth);
 
     /// <summary>The number of grid cells in the Y direction.</summary>
     private int VoxelCountY => (int)Math.Ceiling(Height / GridHeight);
+
+    /// <inheritdoc cref="SampleGridWrapped(double, double, int, int, WrapBehaviour)"/>
+    public SampleGridWrapped(double width, double height, int gridWidth, int gridHeight)
+        : this(width, height, gridWidth, gridHeight, WrapBehaviour.WrapDistanceUnwrapCoordinates)
+    {
+    }
 
     /// <summary>
     /// Calculates the floored (positive) modulus.
@@ -129,24 +145,39 @@ public sealed class WrappedSampleGrid(
                 if (!_samples.TryGetValue(neighbourVoxel, out var neighbour))
                     continue;
 
-                // Unwrap the neighbour coordinates so they are the closest periodic
-                // copy to the sample.
-                var unwrappedX = neighbour.X;
-                var unwrappedY = neighbour.Y;
+                // Get the neighbour's coordinates.
+                var neighbourX = neighbour.X;
+                var neighbourY = neighbour.Y;
 
-                if (unwrappedX - sample.X > halfWidth)
-                    unwrappedX -= Width;
-                else if (sample.X - unwrappedX > halfWidth)
-                    unwrappedX += Width;
+                // Calculate the distance to the neighbour, taking wrapping into account if necessary.
+                double distanceX;
+                double distanceY;
 
-                if (unwrappedY - sample.Y > halfHeight)
-                    unwrappedY -= Height;
-                else if (sample.Y - unwrappedY > halfHeight)
-                    unwrappedY += Height;
+                // Calculate the correct wrapped distance and neighbour coordinates.
+                if (WrapBehaviour == WrapBehaviour.WrapDistanceUnwrapCoordinates)
+                {
 
-                // Calculate the distances using the unwrapped coordinates.
-                var distanceX = Math.Abs(unwrappedX - sample.X);
-                var distanceY = Math.Abs(unwrappedY - sample.Y);
+                    if (neighbourX - sample.X > halfWidth)
+                        neighbourX -= Width;
+                    else if (sample.X - neighbourX > halfWidth)
+                        neighbourX += Width;
+
+                    if (neighbourY - sample.Y > halfHeight)
+                        neighbourY -= Height;
+                    else if (sample.Y - neighbourY > halfHeight)
+                        neighbourY += Height;
+
+                    distanceX = neighbourX - sample.X;
+                    distanceY = neighbourY - sample.Y;
+                }
+                else
+                {
+                    distanceX = Math.Abs(neighbour.X - sample.X);
+                    distanceY = Math.Abs(neighbour.Y - sample.Y);
+
+                    distanceX = Math.Min(distanceX, Width - distanceX);
+                    distanceY = Math.Min(distanceY, Height - distanceY);
+                }
 
                 var distanceSquared =
                     distanceX * distanceX +
@@ -154,8 +185,8 @@ public sealed class WrappedSampleGrid(
 
                 // Return the unwrapped neighbour sample.
                 yield return new Neighbour(
-                    unwrappedX,
-                    unwrappedY,
+                    neighbourX,
+                    neighbourY,
                     distanceSquared);
             }
         }

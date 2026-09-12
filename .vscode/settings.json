@@ -1,4 +1,7 @@
 {
     "editor.formatOnSave": true,
-    "html.autoCreateQuotes": false
+    "html.autoCreateQuotes": false,
+    "cSpell.words": [
+        "Avalonia"
+    ]
 }

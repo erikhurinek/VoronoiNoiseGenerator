@@ -8,8 +8,6 @@ namespace VoronoiNoiseGenerator.Models;
 /// </summary>
 public partial class VoronoiRendererSettings : ObservableObject, IRendererSettings
 {
-    const int SEED_MAX = 9999;
-
     /// <summary>
     /// The minimum distance between Voronoi samples.
     /// </summary>
@@ -17,7 +15,7 @@ public partial class VoronoiRendererSettings : ObservableObject, IRendererSettin
     public partial int Radius { get; set; } = 10;
 
     /// <summary>
-    /// The maxmimum number of samples to generate.
+    /// The maximum number of samples to generate.
     /// </summary> 
     [ObservableProperty]
     public partial int MaxSamples { get; set; } = 1000;
@@ -32,11 +30,11 @@ public partial class VoronoiRendererSettings : ObservableObject, IRendererSettin
     /// The random seed.
     /// </summary>
     [ObservableProperty]
-    public partial int Seed { get; set; } = Random.Shared.Next(SEED_MAX);
+    public partial int Seed { get; set; } = 0;
 
     /// <summary>
     /// Whether the samples should wrap and the texture appear seamless.
     /// </summary>
     [ObservableProperty]
-    public partial bool Wrap { get; set; }
+    public partial bool Wrap { get; set; } = false;
 }

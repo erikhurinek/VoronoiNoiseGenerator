@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -44,10 +45,32 @@ public partial class MainViewModel : ViewModelBase
     public partial ObservableCollection<PassSettings> Passes { get; set; } = new ObservableCollection<PassSettings>();
 
     /// <summary>
-    /// The image that is currently displayed in the UI. <br/>
+    /// The image that is currently displayed in the UI.
     /// </summary>
     [ObservableProperty]
-    public partial Bitmap? DisplayImage { get; private set; } = null;
+    public partial Bitmap? DisplayRenderResult { get; private set; } = null;
+
+    /// <summary>
+    /// Backing field for the <see cref="RenderResult"/> property.
+    /// </summary>
+    private WriteableBitmap? _renderedTexture = null;
+
+    /// <summary>
+    /// The image that is currently rendered in the background. <br/>
+    /// This is used to save the image to disk without affecting the displayed image.
+    /// </summary>
+    public WriteableBitmap? RenderResult
+    {
+        get => _renderedTexture;
+        private set
+        {
+            if (value is null)
+                throw new ArgumentNullException(nameof(value), "Rendered texture cannot be null.");
+
+            DisplayRenderResult = BitmapDisplay.PrepareForDisplay(value);
+            _renderedTexture = value;
+        }
+    }
 
     /// <summary>
     /// The width of the texture to be rendered. <br/>
@@ -99,7 +122,7 @@ public partial class MainViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Renders the texture based on the current pass settings and updates the <see cref="DisplayImage"/> property.
+    /// Renders the texture based on the current pass settings and updates the <see cref="DisplayRenderResult"/> property.
     /// </summary>
     [RelayCommand]
     private void Render()
@@ -120,7 +143,7 @@ public partial class MainViewModel : ViewModelBase
                 continue;
 
             // Get the renderer descriptor.
-            var descriptor = pass.SelectedRenderer;
+            var descriptor = pass.SelectedRendererDescriptor;
 
             // Skip the pass if no renderer is selected.
             if (descriptor is null)
@@ -134,7 +157,7 @@ public partial class MainViewModel : ViewModelBase
         }
 
         // Display the bitmap.
-        DisplayImage = bitmap;
+        RenderResult = bitmap;
     }
 
     /// <summary>
@@ -153,9 +176,19 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private async Task SaveImage()
     {
-        if (DisplayImage is null)
-            return;
+        if (RenderResult is null)
+            throw new InvalidOperationException("No rendered texture available to save.");
 
-        await _imageSaveService.SaveFileAsync(DisplayImage);
+        await _imageSaveService.SaveFileAsync(RenderResult);
+    }
+
+    /// <summary>
+    /// Removes the specified pass from the list of passes. <br/>
+    /// </summary>
+    /// <param name="pass">The pass to remove.</param>
+    [RelayCommand]
+    private void RemovePass(PassSettings pass)
+    {
+        Passes.Remove(pass);
     }
 }

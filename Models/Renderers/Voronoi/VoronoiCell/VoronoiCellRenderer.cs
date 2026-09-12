@@ -24,6 +24,9 @@ public sealed class VoronoiCellRenderer : IRenderer
         if (rendererSettings is null)
             throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
+        // We consider the cell coordinates in this renderer, and we want to wrap them if necessary.
+        WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceAndCoordinates : WrapBehaviour.NoWrap;
+
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
             target.PixelSize.Width,
@@ -31,8 +34,8 @@ public sealed class VoronoiCellRenderer : IRenderer
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
-            rendererSettings.Wrap,
-            rendererSettings.Seed
+            rendererSettings.Seed,
+            wrapBehaviour
         );
 
         // Generate the samples.
@@ -42,7 +45,7 @@ public sealed class VoronoiCellRenderer : IRenderer
         CoordinateHasher hasher = new();
 
         // Iterate over each pixel, and set the color based the nearest sample.
-        BitmapWriter.Write(target, colourMixer, (x, y) =>
+        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
         {
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);
 

@@ -26,6 +26,10 @@ public sealed class VoronoiEdgeRenderer : IRenderer
         if (rendererSettings is null)
             throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
+        // We want neighbour coordinates to exist beyond the border of our grid, so that edges are calculated correctly.
+        // Therefore, we want them to be unwrapped.
+        WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceUnwrapCoordinates : WrapBehaviour.NoWrap;
+
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
             target.PixelSize.Width,
@@ -33,15 +37,15 @@ public sealed class VoronoiEdgeRenderer : IRenderer
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
-            rendererSettings.Wrap,
-            rendererSettings.Seed
+            rendererSettings.Seed,
+            wrapBehaviour
         );
 
         // Generate the samples.
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based the nearest sample.
-        BitmapWriter.Write(target, colourMixer, (x, y) =>
+        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
         {
             // Get all neighbours.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius)
