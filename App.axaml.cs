@@ -7,6 +7,7 @@ using VoronoiNoiseGenerator.Views;
 using Microsoft.Extensions.DependencyInjection;
 using VoronoiNoiseGenerator.Models;
 using Avalonia.Styling;
+using Avalonia.Controls;
 
 namespace VoronoiNoiseGenerator;
 
@@ -24,12 +25,19 @@ public partial class App : Application
         var mainWindow = new MainWindow();
         var services = new ServiceCollection();
 
+        // Register main window
+        services.AddSingleton<Window>(mainWindow);
+
         // Register renderers.
         services.AddSingleton<IRenderer, SolidColourRenderer>();
         services.AddSingleton<IRenderer, VoronoiDistanceRenderer>();
         services.AddSingleton<IRenderer, VoronoiCellRenderer>();
         services.AddSingleton<IRenderer, VoronoiEdgeRenderer>();
         services.AddSingleton<IRenderer, VoronoiPositionRenderer>();
+
+        // Register exporters.
+        services.AddSingleton<IExporter, PngExporter>();
+        services.AddSingleton<IExportService, DialogExportService>();
 
         // Register colour mixers.
         services.AddSingleton<IColourMixer, Models.ColourMixerChannel>();

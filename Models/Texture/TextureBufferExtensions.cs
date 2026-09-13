@@ -13,27 +13,19 @@ namespace VoronoiNoiseGenerator.Models;
 public static class TextureBufferDisplay
 {
     /// <summary>
-    /// Prepares a <see cref="TextureBuffer"/> for display. Ensure the alpha channel is opaque.
-    /// </summary>
-    /// <returns>A new WriteableBitmap that is ready for display.</returns>
-    public static Bitmap PrepareForDisplay(TextureBuffer buffer)
-    {
-        return CreateOpaqueBitmap(buffer);
-    }
-
-    /// <summary>
-    /// Create an opaque 
+    /// Creates a <see cref="WriteableBitmap"/> from a <see cref="TextureBuffer"/>.
     /// </summary>
     /// <param name="source">The source bitmap to copy and modify.</param>
+    /// <param name="opaque">Indicates whether the resulting bitmap should be opaque.</param>
     /// <returns>A new, opaque <see cref="WriteableBitmap"/>.</returns>
-    private static unsafe WriteableBitmap CreateOpaqueBitmap(TextureBuffer source)
+    public static unsafe WriteableBitmap CreateBitmap(this TextureBuffer source, bool opaque)
     {
         // Create the destination bitmap.
         var destination = new WriteableBitmap(
             new PixelSize(source.Width, source.Height),
             new Avalonia.Vector(96, 96),
             PixelFormat.Rgba8888,
-            AlphaFormat.Opaque
+            opaque ? AlphaFormat.Opaque : AlphaFormat.Premul
         );
 
         // Lock the destination.
@@ -58,7 +50,7 @@ public static class TextureBufferDisplay
                 dstPixel[0] = (byte)(clamped.X * 255f + 0.5f);
                 dstPixel[1] = (byte)(clamped.Y * 255f + 0.5f);
                 dstPixel[2] = (byte)(clamped.Z * 255f + 0.5f);
-                dstPixel[3] = 255;
+                dstPixel[3] = opaque ? (byte)255 : (byte)(clamped.W * 255f + 0.5f);
 
                 // Move to the next pixel.
                 dstPixel += 4;

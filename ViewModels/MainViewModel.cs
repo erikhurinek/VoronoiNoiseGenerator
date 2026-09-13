@@ -40,7 +40,7 @@ public partial class MainViewModel : ViewModelBase
     /// <summary>
     /// The service responsible for saving images to disk.
     /// </summary>
-    private ISaveService _imageSaveService;
+    private IExportService _textureExportService;
 
     /// <summary>
     /// Collection of render passes. <br/>
@@ -72,7 +72,7 @@ public partial class MainViewModel : ViewModelBase
             if (value is null)
                 throw new ArgumentNullException(nameof(value), "Rendered texture cannot be null.");
 
-            DisplayRenderResult = TextureBufferDisplay.PrepareForDisplay(value);
+            DisplayRenderResult = value.CreateBitmap(opaque: true);
             _renderedTexture = value;
         }
     }
@@ -102,7 +102,7 @@ public partial class MainViewModel : ViewModelBase
     {
         _descriptors = new List<RendererDescriptor>();
         _colourMixerDescriptors = new List<ColourMixerDescriptor>();
-        _imageSaveService = new MockImageSaveService();
+        _textureExportService = new MockExportService();
         _rendererRegistry = new RendererRegistry();
     }
 
@@ -117,12 +117,12 @@ public partial class MainViewModel : ViewModelBase
         RendererRegistry rendererFactory,
         IEnumerable<IRenderer> renderers,
         IEnumerable<IColourMixer> colourMixers,
-        ISaveService fileSaveService
+        IExportService exportService
     )
     {
         _descriptors = renderers.Select(r => r.Descriptor);
         _colourMixerDescriptors = colourMixers.Select(c => c.Descriptor);
-        _imageSaveService = fileSaveService;
+        _textureExportService = exportService;
         _rendererRegistry = rendererFactory;
     }
 
@@ -182,11 +182,11 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExportRenderResult()
     {
+        // Return if there is no rendered texture to export.
         if (RenderResult is null)
-            throw new InvalidOperationException("No rendered texture available to save.");
+            return;
 
-        throw new NotImplementedException("ExportRenderResult is not implemented yet.");
-        // await _imageSaveService.SaveFileAsync(RenderResult);
+        await _textureExportService.SaveFileAsync(RenderResult);
     }
 
     /// <summary>
