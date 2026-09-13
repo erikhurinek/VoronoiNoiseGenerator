@@ -5,7 +5,7 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// An interface for colour mixers.
 /// </summary>
-public interface IColourMixer : IFactoryInstantiable<ColourMixerDescriptor>
+public interface IColourMixer
 {
     /// <summary>
     /// Mixes two colours based on the specific mixing logic.

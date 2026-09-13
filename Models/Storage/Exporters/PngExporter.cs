@@ -6,8 +6,10 @@ namespace VoronoiNoiseGenerator.Models;
 
 public class PngExporter : IExporter
 {
-    /// <inheritdoc/>
-    public ExporterDescriptor Descriptor => new("PNG Image", GetType(), FilePickerFileTypes.ImagePng);
+    /// <summary>
+    /// Gets the descriptor for this exporter.
+    /// </summary>
+    public static ExporterDescriptor Descriptor => new("PNG Image", typeof(PngExporter), FilePickerFileTypes.ImagePng);
 
     /// <inheritdoc/>
     public async Task ExportAsync(TextureBuffer texture, IStorageFile file)

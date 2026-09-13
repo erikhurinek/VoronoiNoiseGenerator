@@ -145,7 +145,7 @@ public partial class MainViewModel : ViewModelBase
                     continue;
 
                 // Get the required renderer instance.
-                IRenderer renderer = _rendererRegistry.Create(descriptor);
+                IRenderer renderer = _rendererRegistry.Get(descriptor);
 
                 // Modify the bitmap.
                 renderer.Render(buffer, pass);

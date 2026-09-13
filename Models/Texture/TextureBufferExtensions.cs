@@ -10,7 +10,7 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// A static helper class for preparing <see cref="TextureBuffer"/> instances for display in a UI.
 /// </summary>
-public static class TextureBufferDisplay
+public static class TextureBufferExtensions
 {
     /// <summary>
     /// Creates a <see cref="WriteableBitmap"/> from a <see cref="TextureBuffer"/>.

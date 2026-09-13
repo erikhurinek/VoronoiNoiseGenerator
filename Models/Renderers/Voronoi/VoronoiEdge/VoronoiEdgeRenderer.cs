@@ -11,8 +11,10 @@ namespace VoronoiNoiseGenerator.Models;
 /// </summary>
 public sealed class VoronoiEdgeRenderer : IRenderer
 {
-    /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Edge", GetType(), typeof(VoronoiRendererSettings));
+    /// <summary>
+    /// Gets the descriptor for this renderer.
+    /// </summary>
+    public static RendererDescriptor Descriptor => new("Voronoi Edge", typeof(VoronoiEdgeRenderer), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
@@ -25,7 +27,7 @@ public sealed class VoronoiEdgeRenderer : IRenderer
         // Therefore, we want them to be unwrapped.
         WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceUnwrapCoordinates : WrapBehaviour.NoWrap;
 
-        // Create a Poisson disc sampler.
+        // Create a Poisson disc sampler and generate the samples.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
             target.Width,
             target.Height,

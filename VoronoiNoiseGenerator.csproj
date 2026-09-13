@@ -22,5 +22,6 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"></PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11"></PackageReference>
+    <PackageReference Include="TinyEXR.NET" Version="1.1.0" />
   </ItemGroup>
 </Project>

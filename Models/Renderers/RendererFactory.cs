@@ -1,17 +1,19 @@
+using System;
 using System.Collections.Generic;
 
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// Associates a renderer type with its implementation.
+/// A factory for creating renderers.
 /// </summary>
 public sealed class RendererFactory : SingletonFactory<IRenderer, RendererDescriptor>
 {
-    protected override IEnumerable<IRenderer> Instances => [
-        new SolidColourRenderer(),
-        new VoronoiCellRenderer(),
-        new VoronoiDistanceRenderer(),
-        new VoronoiEdgeRenderer(),
-        new VoronoiPositionRenderer()
+    /// <inheritdoc/>
+    public override IEnumerable<RendererDescriptor> Descriptors => [
+        SolidColourRenderer.Descriptor,
+        VoronoiCellRenderer.Descriptor,
+        VoronoiDistanceRenderer.Descriptor,
+        VoronoiEdgeRenderer.Descriptor,
+        VoronoiPositionRenderer.Descriptor,
     ];
 }

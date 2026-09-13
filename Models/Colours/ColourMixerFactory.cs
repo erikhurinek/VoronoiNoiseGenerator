@@ -2,10 +2,14 @@ using System.Collections.Generic;
 
 namespace VoronoiNoiseGenerator.Models;
 
+/// <summary>
+/// A factory for creating instances of <see cref="IColourMixer"/> implementations.
+/// </summary>
 public sealed class ColourMixerFactory : SingletonFactory<IColourMixer, ColourMixerDescriptor>
 {
-    protected override IEnumerable<IColourMixer> Instances =>
+    /// <inheritdoc/>
+    public override IEnumerable<ColourMixerDescriptor> Descriptors =>
     [
-        new ColourMixerChannel()
+        ColourMixerChannel.Descriptor,
     ];
 }

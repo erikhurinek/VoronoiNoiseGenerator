@@ -10,9 +10,9 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class ExporterFactory : SingletonFactory<IExporter, ExporterDescriptor>
 {
     /// <inheritdoc/>
-    protected override IEnumerable<IExporter> Instances =>
-    [
-        new PngExporter()
+    public override IEnumerable<ExporterDescriptor> Descriptors => [
+        ExrExporter.Descriptor,
+        PngExporter.Descriptor,
     ];
 
     /// <summary>
@@ -20,9 +20,10 @@ public sealed class ExporterFactory : SingletonFactory<IExporter, ExporterDescri
     /// </summary>
     /// <param name="extension"></param>
     /// <returns></returns>
-    public IExporter? GetMatchingExporterByExtension(string extension) =>
-        Instances.FirstOrDefault(e =>
-            e.Descriptor.FileType.Patterns?.Any(p => MatchesExtension(p, extension)) ?? false);
+    public IExporter? GetMatchingExporterByExtension(string extension) => Descriptors
+        .Where(descriptor => descriptor.FileType.Patterns?.Any(fileType => MatchesExtension(fileType ?? string.Empty, extension)) ?? false)
+        .Select(Get)
+        .FirstOrDefault();
 
     /// <summary>
     /// Determines whether the given file extension matches the specified pattern.

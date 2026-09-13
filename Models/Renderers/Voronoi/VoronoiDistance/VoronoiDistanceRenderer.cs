@@ -9,8 +9,10 @@ namespace VoronoiNoiseGenerator.Models;
 /// </summary>
 public sealed class VoronoiDistanceRenderer : IRenderer
 {
-    /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Distance", GetType(), typeof(VoronoiRendererSettings));
+    /// <summary>
+    /// Gets the descriptor for this renderer.
+    /// </summary>
+    public static RendererDescriptor Descriptor => new("Voronoi Distance", typeof(VoronoiDistanceRenderer), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
@@ -23,7 +25,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
         WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceUnwrapCoordinates : WrapBehaviour.NoWrap;
 
         // Create a Poisson disc sampler.
-        ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
+        ISampleCollection samples = SamplerFactory.CreatePoissonDiscSampler(
             target.Width,
             target.Height,
             rendererSettings.Radius,
@@ -31,10 +33,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
             rendererSettings.Subsamples,
             rendererSettings.Seed,
             wrapBehaviour
-        );
-
-        // Generate the samples.
-        ISampleCollection samples = sampler.GenerateSamples();
+        ).GenerateSamples();
 
         // Iterate over each pixel, and set the color based on the distance.
         TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
@@ -45,7 +44,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
             // There should usually be a sample, but if the settings were misconfigured, 
             // return a transparent pixel.
             if (!neighbours.Any())
-                return Colour.Black;
+                return Colour.Transparent;
 
             // Get the nearest sample.
             Neighbour minSample = neighbours.OrderBy(n => n.DistanceSquared).First();
