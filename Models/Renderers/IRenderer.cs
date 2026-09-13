@@ -1,5 +1,3 @@
-using Avalonia.Media.Imaging;
-
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
@@ -17,5 +15,5 @@ public interface IRenderer
     /// </summary>
     /// <param name="target">The bitmap to modify.</param>
     /// <param name="settings">The settings to use for rendering.</param>
-    void Render(WriteableBitmap target, PassSettings settings);
+    void Render(TextureBuffer target, PassSettings settings);
 }

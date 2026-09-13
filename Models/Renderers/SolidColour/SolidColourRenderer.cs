@@ -1,5 +1,4 @@
 using System;
-using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;
 
@@ -12,7 +11,7 @@ public sealed class SolidColourRenderer : IRenderer
     public RendererDescriptor Descriptor => new("Solid Colour", GetType(), typeof(SolidColourRendererSettings));
 
     /// <inheritdoc/>
-    public void Render(WriteableBitmap target, PassSettings settings)
+    public void Render(TextureBuffer target, PassSettings settings)
     {
         // Get the colour mixer
         IColourMixer colourMixer = settings.ColourMixer;
@@ -22,6 +21,6 @@ public sealed class SolidColourRenderer : IRenderer
             ?? throw new ArgumentException("Invalid renderer settings for SolidColourRenderer.");
 
         // Fill the bitmap with the solid colour.
-        BitmapIterator.Iterate(target, colourMixer, (x, y) => rendererSettings.Colour);
+        TextureBufferIterator.Iterate(target, colourMixer, (x, y) => rendererSettings.Colour);
     }
 }

@@ -15,9 +15,9 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="seed">The random seed.</param>
 /// <param name="wrapBehaviour">What properties of the samples should be wrapped.</param>
 public sealed class PoissonDiscSampler(
-    double width,
-    double height,
-    double radius,
+    float width,
+    float height,
+    float radius,
     int maxSamples,
     int subsamples,
     int seed,
@@ -27,17 +27,17 @@ public sealed class PoissonDiscSampler(
     /// <summary>
     /// The width of the sampling area.
     /// </summary>
-    public double Width { get; } = width;
+    public float Width { get; } = width;
 
     /// <summary>
     /// The height of the sampling area.
     /// </summary>
-    public double Height { get; } = height;
+    public float Height { get; } = height;
 
     /// <summary>
     /// The minimum distance between samples.
     /// </summary>
-    public double Radius { get; } = radius;
+    public float Radius { get; } = radius;
 
     /// <summary>
     /// The maximum number of samples to generate.
@@ -59,8 +59,8 @@ public sealed class PoissonDiscSampler(
     /// </summary>
     public int Seed { get; } = seed;
 
-    /// <inheritdoc cref="PoissonDiscSampler(double, double, double, int, int, int, WrapBehaviour)"/>
-    public PoissonDiscSampler(double width, double height, double radius, int maxSamples, int subsamples, int seed)
+    /// <inheritdoc cref="PoissonDiscSampler(float, float, float, int, int, int, WrapBehaviour)"/>
+    public PoissonDiscSampler(float width, float height, float radius, int maxSamples, int subsamples, int seed)
         : this(width, height, radius, maxSamples, subsamples, seed, WrapBehaviour.NoWrap)
     {
     }
@@ -77,7 +77,7 @@ public sealed class PoissonDiscSampler(
         // If the candidate is far enough from other samples, it is added to the collection and becomes an active sample.
 
         // Calculate the grid cell size.
-        int gridSize = (int)(Radius / Math.Sqrt(2));
+        int gridSize = (int)(Radius / MathF.Sqrt(2));
 
         // Initialize the appropriate sample grid.
         ISampleGrid grid = WrapBehaviour == WrapBehaviour.NoWrap
@@ -87,14 +87,14 @@ public sealed class PoissonDiscSampler(
         Random random = new(Seed);
 
         // Randomly select the initial sample in the centremost grid cell.
-        (double, double) initialSample = (
-            (Width / 2) + (random.NextDouble() - 0.5) * gridSize,
-            (Height / 2) + (random.NextDouble() - 0.5) * gridSize
+        (float, float) initialSample = (
+            (Width / 2) + (random.NextSingle() - 0.5f) * gridSize,
+            (Height / 2) + (random.NextSingle() - 0.5f) * gridSize
         );
         grid.Add(initialSample.Item1, initialSample.Item2);
 
         // Use a queue to track active samples for generating candidates.
-        Queue<(double, double)> activeQueue = new();
+        Queue<(float, float)> activeQueue = new();
         activeQueue.Enqueue(initialSample);
 
         // Iteratively generate samples.
@@ -108,12 +108,12 @@ public sealed class PoissonDiscSampler(
             for (int i = 0; i < Subsamples; i++)
             {
                 // Generate random angle and offset.
-                double angle = random.NextDouble() * 2 * Math.PI;
-                double offset = Radius + random.NextDouble() * Radius;
+                float angle = random.NextSingle() * 2.0f * MathF.PI;
+                float offset = Radius + random.NextSingle() * Radius;
 
                 var candidate = (
-                    sample.Item1 + offset * Math.Cos(angle),
-                    sample.Item2 + offset * Math.Sin(angle)
+                    sample.Item1 + offset * MathF.Cos(angle),
+                    sample.Item2 + offset * MathF.Sin(angle)
                 );
 
                 // Check if the candidate is too close to existing samples.

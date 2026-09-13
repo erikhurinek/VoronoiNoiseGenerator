@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
@@ -16,5 +18,5 @@ public interface IColourMixer
     /// <param name="foreground">The foreground colour.</param>
     /// <param name="background">The background colour.</param>
     /// <returns>The mixed colour.</returns>
-    public Colour Mix(Colour foreground, Colour background);
+    public Vector4 Mix(Vector4 foreground, Vector4 background);
 }

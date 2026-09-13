@@ -29,11 +29,11 @@ public static class CoordinateHash
     /// <param name="y">Second component.</param>
     /// <param name="z">Third component.</param>
     /// <returns>A ulong hash value.</returns>
-    public static ulong Hash(double x, double y, double z)
+    public static ulong Hash(float x, float y, float z)
     {
-        ulong hx = unchecked((ulong)BitConverter.DoubleToInt64Bits(x));
-        ulong hy = unchecked((ulong)BitConverter.DoubleToInt64Bits(y));
-        ulong hz = unchecked((ulong)BitConverter.DoubleToInt64Bits(z));
+        ulong hx = unchecked((ulong)BitConverter.SingleToInt32Bits(x));
+        ulong hy = unchecked((ulong)BitConverter.SingleToInt32Bits(y));
+        ulong hz = unchecked((ulong)BitConverter.SingleToInt32Bits(z));
 
         ulong combined = hx * 0x9E3779B97F4A7C15UL
                         ^ hy * 0xC2B2AE3D27D4EB4FUL
@@ -43,9 +43,9 @@ public static class CoordinateHash
     }
 
     /// <summary>
-    /// Generates a double value in the range [0, 1] from a ulong value.
+    /// Generates a float value in the range [0, 1] from a ulong value.
     /// </summary>
     /// <param name="h">The ulong value to convert.</param>
-    /// <returns>A double value in the range [0, 1].</returns>
-    public static double ToUnit(ulong h) => (h >> 11) * (1.0 / (1UL << 53));
+    /// <returns>A float value in the range [0, 1].</returns>
+    public static float ToUnit(ulong h) => (h >> 11) * (1.0f / (1UL << 53));
 }

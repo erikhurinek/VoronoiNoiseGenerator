@@ -1,3 +1,4 @@
+using System.Numerics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace VoronoiNoiseGenerator.Models;
@@ -14,7 +15,7 @@ public partial class ColourMixerChannel : ObservableObject, IColourMixer
     /// The factor to use for mixing the colours.
     /// </summary>
     [ObservableProperty]
-    public partial double Factor { get; set; } = 1;
+    public partial float Factor { get; set; } = 1.0f;
 
     /// <summary>
     /// Whether the red channel should be mixed.
@@ -43,35 +44,34 @@ public partial class ColourMixerChannel : ObservableObject, IColourMixer
     /// <summary>
     /// Helper property for the effective mixing factor for the red channel, based on whether it is enabled for mixing.
     /// </summary>
-    private double RedFactor { get => MixRed ? Factor : 0; }
+    private float RedFactor { get => MixRed ? Factor : 0.0f; }
 
     /// <summary>
     /// Helper property for the effective mixing factor for the green channel, based on whether it is enabled for mixing.
     /// </summary>
-    private double GreenFactor { get => MixGreen ? Factor : 0; }
+    private float GreenFactor { get => MixGreen ? Factor : 0.0f; }
 
     /// <summary>
     /// Helper property for the effective mixing factor for the blue channel, based on whether it is enabled for mixing.
     /// </summary>
-    private double BlueFactor { get => MixBlue ? Factor : 0; }
+    private float BlueFactor { get => MixBlue ? Factor : 0.0f; }
 
     /// <summary>
     /// Helper property for the effective mixing factor for the alpha channel, based on whether it is enabled for mixing.
     /// </summary>
-    private double AlphaFactor { get => MixAlpha ? Factor : 0; }
+    private float AlphaFactor { get => MixAlpha ? Factor : 0.0f; }
 
     /// <summary>
     /// Linearly interpolates two colours based on the factor and channel selection.
     /// A factor of 1 means the foreground is fully used.
     /// </summary>
     /// <inheritdoc/>
-    public Colour Mix(Colour foreground, Colour background)
+    public Vector4 Mix(Vector4 foreground, Vector4 background)
     {
-        double red = (foreground.Red * RedFactor) + (background.Red * (1 - RedFactor));
-        double green = (foreground.Green * GreenFactor) + (background.Green * (1 - GreenFactor));
-        double blue = (foreground.Blue * BlueFactor) + (background.Blue * (1 - BlueFactor));
-        double alpha = (foreground.Alpha * AlphaFactor) + (background.Alpha * (1 - AlphaFactor));
-
-        return new Colour(red, green, blue, alpha);
+        return Vector4.Lerp(
+            background,
+            foreground,
+            new Vector4(RedFactor, GreenFactor, BlueFactor, AlphaFactor)
+        );
     }
 }

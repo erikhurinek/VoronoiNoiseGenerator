@@ -37,7 +37,7 @@ public partial class App : Application
         // Register the renderer registry and view model.
         services.AddSingleton<RendererRegistry>();
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<IBitmapSaveService>(new BitmapSaveService(mainWindow));
+        // services.AddSingleton<ISaveService>(new TextureBufferSaveService(mainWindow));
 
         // Build the service provider.
         _services = services.BuildServiceProvider();

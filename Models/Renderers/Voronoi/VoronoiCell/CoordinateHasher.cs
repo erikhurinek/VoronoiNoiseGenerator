@@ -21,17 +21,17 @@ public sealed class CoordinateHasher
     /// <summary>
     /// A thread-safe cache for storing computed colours based on 2D coordinates.
     /// </summary>
-    private static readonly ConcurrentDictionary<(double X, double Y), Colour> _colorCache = new();
+    private static readonly ConcurrentDictionary<(float X, float Y), Colour> _colorCache = new();
 
     /// <summary>
-    /// Helper method to turn a 3D vector into a double value in the range [0, 1].<br/>
+    /// Helper method to turn a 3D vector into a float value in the range [0, 1].<br/>
     /// </summary>
     /// <param name="x">First component.</param>
     /// <param name="y">Second component.</param>
     /// <param name="z">Third component.</param>
-    /// <returns>A double value in the range [0, 1].</returns>
+    /// <returns>A float value in the range [0, 1].</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private double GetValue(double x, double y, double z)
+    private float GetValue(float x, float y, float z)
         => CoordinateHash.ToUnit(CoordinateHash.Hash(x, y, z));
 
     /// <summary>
@@ -40,13 +40,13 @@ public sealed class CoordinateHasher
     /// <param name="x">The x-coordinate.</param>
     /// <param name="y">The y-coordinate.</param>
     /// <returns>The hashed colour.</returns>
-    public Colour GetColour(double x, double y)
+    public Colour GetColour(float x, float y)
     {
         return _colorCache.GetOrAdd((x, y), key => new(
-            GetValue(key.X, key.Y, 0),
-            GetValue(key.X, key.Y, 1),
-            GetValue(key.X, key.Y, 2),
-            GetValue(key.X, key.Y, 3)
+            GetValue(key.X, key.Y, 0.0f),
+            GetValue(key.X, key.Y, 1.0f),
+            GetValue(key.X, key.Y, 2.0f),
+            GetValue(key.X, key.Y, 3.0f)
         ));
     }
 }

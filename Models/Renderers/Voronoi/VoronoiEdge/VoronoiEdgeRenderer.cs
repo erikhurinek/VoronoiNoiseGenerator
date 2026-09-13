@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Avalonia.Media.Imaging;
+using System.Numerics;
 
 namespace VoronoiNoiseGenerator.Models;
 
@@ -15,16 +15,11 @@ public sealed class VoronoiEdgeRenderer : IRenderer
     public RendererDescriptor Descriptor => new("Voronoi Edge", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
-    public void Render(WriteableBitmap target, PassSettings settings)
+    public void Render(TextureBuffer target, PassSettings settings)
     {
-        // Get the colour mixer
-        IColourMixer colourMixer = settings.ColourMixer;
-
         // Cast the renderer settings to the expected type.
-        VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings;
-
-        if (rendererSettings is null)
-            throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
+        VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings
+            ?? throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
         // We want neighbour coordinates to exist beyond the border of our grid, so that edges are calculated correctly.
         // Therefore, we want them to be unwrapped.
@@ -32,8 +27,8 @@ public sealed class VoronoiEdgeRenderer : IRenderer
 
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
-            target.PixelSize.Width,
-            target.PixelSize.Height,
+            target.Width,
+            target.Height,
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
@@ -45,7 +40,7 @@ public sealed class VoronoiEdgeRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based the nearest sample.
-        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
         {
             // Get all neighbours.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius)
@@ -57,34 +52,34 @@ public sealed class VoronoiEdgeRenderer : IRenderer
                 return Colour.Black;
 
             Neighbour nearest = neighbours[0];
-            double nearestDistance = Math.Sqrt(nearest.DistanceSquared);
+            float nearestDistance = MathF.Sqrt(nearest.DistanceSquared);
 
-            double minEdgeDistance = double.PositiveInfinity;
+            float minEdgeDistance = float.PositiveInfinity;
 
             for (int i = 1; i < neighbours.Count; i++)
             {
                 Neighbour other = neighbours[i];
-                double otherDistance = Math.Sqrt(other.DistanceSquared);
+                float otherDistance = MathF.Sqrt(other.DistanceSquared);
 
-                double lowerBound = (otherDistance - nearestDistance) * 0.5;
+                float lowerBound = (otherDistance - nearestDistance) * 0.5f;
                 if (lowerBound >= minEdgeDistance)
                     break;
 
-                double dx = nearest.X - other.X;
-                double dy = nearest.Y - other.Y;
-                double siteDistance = Math.Sqrt(dx * dx + dy * dy);
+                float dx = nearest.X - other.X;
+                float dy = nearest.Y - other.Y;
+                float siteDistance = MathF.Sqrt(dx * dx + dy * dy);
 
-                if (siteDistance == 0.0)
+                if (siteDistance == 0.0f)
                     continue;
 
-                double edgeDistance = (other.DistanceSquared - nearest.DistanceSquared) / (2.0 * siteDistance);
+                float edgeDistance = (other.DistanceSquared - nearest.DistanceSquared) / (2.0f * siteDistance);
 
                 if (edgeDistance < minEdgeDistance)
                     minEdgeDistance = edgeDistance;
             }
 
-            double intensity = Math.Clamp(minEdgeDistance / (rendererSettings.Radius * 2.0), 0.0, 1.0);
-            return new Colour(intensity, intensity, intensity, intensity);
+            float intensity = minEdgeDistance / (rendererSettings.Radius * 2.0f);
+            return new Vector4(intensity);
         });
     }
 }

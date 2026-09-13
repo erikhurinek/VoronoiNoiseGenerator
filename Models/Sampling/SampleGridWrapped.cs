@@ -19,18 +19,18 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="gridWidth">The width of each grid cell in sample space.</param>
 /// <param name="gridHeight">The height of each grid cell in sample space.</param>
 /// <param name="wrapBehaviour">The wrapping behavior for the sample grid.</param>
-public sealed class SampleGridWrapped(double width, double height, int gridWidth, int gridHeight, WrapBehaviour wrapBehaviour) : ISampleGrid
+public sealed class SampleGridWrapped(float width, float height, int gridWidth, int gridHeight, WrapBehaviour wrapBehaviour) : ISampleGrid
 {
     /// <summary>
     /// A dictionary that maps grid cell coordinates to the sample stored in that cell.
     /// </summary>
-    private readonly Dictionary<(int X, int Y), (double X, double Y)> _samples = new();
+    private readonly Dictionary<(int X, int Y), (float X, float Y)> _samples = new();
 
     /// <inheritdoc/>
-    public double Width { get; } = width;
+    public float Width { get; } = width;
 
     /// <inheritdoc/>
-    public double Height { get; } = height;
+    public float Height { get; } = height;
 
     /// <inheritdoc/>
     public int GridWidth { get; } = gridWidth;
@@ -44,13 +44,13 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
     public WrapBehaviour WrapBehaviour { get; } = wrapBehaviour;
 
     /// <summary>The number of grid cells in the X direction.</summary>
-    private int VoxelCountX => (int)Math.Ceiling(Width / GridWidth);
+    private int VoxelCountX => (int)MathF.Ceiling(Width / GridWidth);
 
     /// <summary>The number of grid cells in the Y direction.</summary>
-    private int VoxelCountY => (int)Math.Ceiling(Height / GridHeight);
+    private int VoxelCountY => (int)MathF.Ceiling(Height / GridHeight);
 
-    /// <inheritdoc cref="SampleGridWrapped(double, double, int, int, WrapBehaviour)"/>
-    public SampleGridWrapped(double width, double height, int gridWidth, int gridHeight)
+    /// <inheritdoc cref="SampleGridWrapped(float, float, int, int, WrapBehaviour)"/>
+    public SampleGridWrapped(float width, float height, int gridWidth, int gridHeight)
         : this(width, height, gridWidth, gridHeight, WrapBehaviour.WrapDistanceUnwrapCoordinates)
     {
     }
@@ -69,9 +69,9 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
     /// <param name="x">Sample x-coordinate.</param>
     /// <param name="y">Sample y-coordinate.</param>
     /// <returns>The wrapped sample coordinates.</returns>
-    private (double X, double Y) WrapSample(double x, double y) => (
-            Mod((int)Math.Floor(x), (int)Width) + (x - Math.Floor(x)),
-            Mod((int)Math.Floor(y), (int)Height) + (y - Math.Floor(y))
+    private (float X, float Y) WrapSample(float x, float y) => (
+            Mod((int)MathF.Floor(x), (int)Width) + (x - MathF.Floor(x)),
+            Mod((int)MathF.Floor(y), (int)Height) + (y - MathF.Floor(y))
         );
 
     /// <summary>
@@ -80,7 +80,7 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
     /// <param name="x">Sample x-coordinate.</param>
     /// <param name="y">Sample y-coordinate.</param>
     /// <returns>The grid cell coordinates.</returns>
-    private (int X, int Y) SampleToVoxel(double x, double y)
+    private (int X, int Y) SampleToVoxel(float x, float y)
     {
         var wrapped = WrapSample(x, y);
 
@@ -102,7 +102,7 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
         );
 
     /// <inheritdoc/>
-    public void Add(double x, double y)
+    public void Add(float x, float y)
     {
         var sample = WrapSample(x, y);
         var voxel = SampleToVoxel(sample.X, sample.Y);
@@ -111,25 +111,25 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
     }
 
     /// <inheritdoc/>
-    public bool Occupied(double x, double y) => _samples.ContainsKey(SampleToVoxel(x, y));
+    public bool Occupied(float x, float y) => _samples.ContainsKey(SampleToVoxel(x, y));
 
     /// <param name="distance">The Manhattan distance to search for neighbours.</param>
     /// <inheritdoc/>
     public IEnumerable<Neighbour> Neighbours(
-        double x,
-        double y,
-        double distance)
+        float x,
+        float y,
+        float distance)
     {
         // Wrap the sample and calculate voxel coordinates.
         var sample = WrapSample(x, y);
         var voxel = SampleToVoxel(sample.X, sample.Y);
 
         // Calculate the limits of the search area in voxel space.
-        var voxelDistanceX = (int)Math.Ceiling(distance / GridWidth);
-        var voxelDistanceY = (int)Math.Ceiling(distance / GridHeight);
+        var voxelDistanceX = (int)MathF.Ceiling(distance / GridWidth);
+        var voxelDistanceY = (int)MathF.Ceiling(distance / GridHeight);
 
-        var halfWidth = Width / 2.0;
-        var halfHeight = Height / 2.0;
+        var halfWidth = Width / 2.0f;
+        var halfHeight = Height / 2.0f;
 
         // Iterate over the neighbouring voxels within the distance.
         for (var dx = -voxelDistanceX; dx <= voxelDistanceX; dx++)
@@ -150,8 +150,8 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
                 var neighbourY = neighbour.Y;
 
                 // Calculate the distance to the neighbour, taking wrapping into account if necessary.
-                double distanceX;
-                double distanceY;
+                float distanceX;
+                float distanceY;
 
                 // Calculate the correct wrapped distance and neighbour coordinates.
                 if (WrapBehaviour == WrapBehaviour.WrapDistanceUnwrapCoordinates)
@@ -172,11 +172,11 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
                 }
                 else
                 {
-                    distanceX = Math.Abs(neighbour.X - sample.X);
-                    distanceY = Math.Abs(neighbour.Y - sample.Y);
+                    distanceX = MathF.Abs(neighbour.X - sample.X);
+                    distanceY = MathF.Abs(neighbour.Y - sample.Y);
 
-                    distanceX = Math.Min(distanceX, Width - distanceX);
-                    distanceY = Math.Min(distanceY, Height - distanceY);
+                    distanceX = MathF.Min(distanceX, Width - distanceX);
+                    distanceY = MathF.Min(distanceY, Height - distanceY);
                 }
 
                 var distanceSquared =
@@ -196,5 +196,5 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
     /// Always returns false, since this grid is wrapped.
     /// </summary>
     /// <inheritdoc/>
-    public bool OutOfBounds(double x, double y) => false;
+    public bool OutOfBounds(float x, float y) => false;
 }

@@ -40,7 +40,7 @@ public partial class MainViewModel : ViewModelBase
     /// <summary>
     /// The service responsible for saving images to disk.
     /// </summary>
-    private IBitmapSaveService _imageSaveService;
+    private ISaveService _imageSaveService;
 
     /// <summary>
     /// Collection of render passes. <br/>
@@ -58,13 +58,13 @@ public partial class MainViewModel : ViewModelBase
     /// <summary>
     /// Backing field for the <see cref="RenderResult"/> property.
     /// </summary>
-    private WriteableBitmap? _renderedTexture = null;
+    private TextureBuffer? _renderedTexture = null;
 
     /// <summary>
     /// The image that is currently rendered in the background. <br/>
     /// This is used to save the image to disk without affecting the displayed image.
     /// </summary>
-    public WriteableBitmap? RenderResult
+    public TextureBuffer? RenderResult
     {
         get => _renderedTexture;
         private set
@@ -72,7 +72,7 @@ public partial class MainViewModel : ViewModelBase
             if (value is null)
                 throw new ArgumentNullException(nameof(value), "Rendered texture cannot be null.");
 
-            DisplayRenderResult = BitmapDisplay.PrepareForDisplay(value);
+            DisplayRenderResult = TextureBufferDisplay.PrepareForDisplay(value);
             _renderedTexture = value;
         }
     }
@@ -117,7 +117,7 @@ public partial class MainViewModel : ViewModelBase
         RendererRegistry rendererFactory,
         IEnumerable<IRenderer> renderers,
         IEnumerable<IColourMixer> colourMixers,
-        IBitmapSaveService fileSaveService
+        ISaveService fileSaveService
     )
     {
         _descriptors = renderers.Select(r => r.Descriptor);
@@ -135,13 +135,7 @@ public partial class MainViewModel : ViewModelBase
         // Render the bitmap in the background.
         var bitmap = await Task.Run(() =>
         {
-            // Create a new bitmap.
-            var bitmap = new WriteableBitmap(
-                new PixelSize(ImageWidth, ImageHeight),
-                new Vector(96, 96),
-                PixelFormat.Rgba8888,
-                AlphaFormat.Opaque
-            );
+            var buffer = new TextureBuffer(ImageWidth, ImageHeight);
 
             // Iteratively apply the passes.
             foreach (PassSettings pass in Passes)
@@ -161,10 +155,10 @@ public partial class MainViewModel : ViewModelBase
                 IRenderer renderer = _rendererRegistry.Get(descriptor.RendererType);
 
                 // Modify the bitmap.
-                renderer.Render(bitmap, pass);
+                renderer.Render(buffer, pass);
             }
 
-            return bitmap;
+            return buffer;
         });
 
         // Display the bitmap.
@@ -191,7 +185,8 @@ public partial class MainViewModel : ViewModelBase
         if (RenderResult is null)
             throw new InvalidOperationException("No rendered texture available to save.");
 
-        await _imageSaveService.SaveFileAsync(RenderResult);
+        throw new NotImplementedException("ExportRenderResult is not implemented yet.");
+        // await _imageSaveService.SaveFileAsync(RenderResult);
     }
 
     /// <summary>
@@ -199,10 +194,7 @@ public partial class MainViewModel : ViewModelBase
     /// </summary>
     /// <param name="pass">The pass to remove.</param>
     [RelayCommand]
-    private void RemovePass(PassSettings pass)
-    {
-        Passes.Remove(pass);
-    }
+    private void RemovePass(PassSettings pass) => Passes.Remove(pass);
 
     /// <summary>
     /// Removes the pass that is currently hovered over in the UI.

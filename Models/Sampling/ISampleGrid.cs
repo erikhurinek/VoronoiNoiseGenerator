@@ -9,12 +9,12 @@ public interface ISampleGrid : ISampleCollection
     /// <summary>
     /// The width of the grid in sample space.
     /// </summary>
-    double Width { get; }
+    float Width { get; }
 
     /// <summary>
     /// The height of the grid in sample space.
     /// </summary>
-    double Height { get; }
+    float Height { get; }
 
     /// <summary>
     /// The width of each grid cell in sample space.
@@ -32,7 +32,7 @@ public interface ISampleGrid : ISampleCollection
     /// <param name="x">Sample x-coordinate.</param>
     /// <param name="y">Sample y-coordinate.</param>
     /// <returns>Whether the grid cell is occupied by a sample.</returns>
-    public bool Occupied(double x, double y);
+    public bool Occupied(float x, float y);
 
     /// <summary>
     /// Returns true if the given sample coordinates are out of bounds of the grid.
@@ -40,5 +40,5 @@ public interface ISampleGrid : ISampleCollection
     /// <param name="x">Sample x-coordinate.</param>
     /// <param name="y">Sample y-coordinate.</param>
     /// <returns>Whether the sample is out of bounds.</returns>
-    public bool OutOfBounds(double x, double y);
+    public bool OutOfBounds(float x, float y);
 }

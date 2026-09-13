@@ -16,6 +16,6 @@ public static class SamplerFactory
     /// <param name="seed">The random seed.</param>
     /// <param name="wrapBehaviour">What properties of the samples should be wrapped.</param>
     /// <returns>An instance of <see cref="PoissonDiscSampler"/>.</returns>
-    public static ISampler CreatePoissonDiscSampler(double width, double height, double radius, int maxSamples, int subsamples, int seed, WrapBehaviour wrapBehaviour) =>
+    public static ISampler CreatePoissonDiscSampler(float width, float height, float radius, int maxSamples, int subsamples, int seed, WrapBehaviour wrapBehaviour) =>
         new PoissonDiscSampler(width, height, radius, maxSamples, subsamples, seed, wrapBehaviour);
 }

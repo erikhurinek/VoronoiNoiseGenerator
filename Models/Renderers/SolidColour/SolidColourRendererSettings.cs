@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -13,25 +12,25 @@ public sealed partial class SolidColourRendererSettings : ObservableObject, IRen
     /// The red channel of the solid colour, in the range [0, 1].
     /// </summary>
     [ObservableProperty]
-    public partial double R { get; set; }
+    public partial float R { get; set; }
 
     /// <summary>
     /// The green channel of the solid colour, in the range [0, 1].
     /// </summary>
     [ObservableProperty]
-    public partial double G { get; set; }
+    public partial float G { get; set; }
 
     /// <summary>
     /// The blue channel of the solid colour, in the range [0, 1].
     /// </summary>
     [ObservableProperty]
-    public partial double B { get; set; }
+    public partial float B { get; set; }
 
     /// <summary>
     /// The alpha channel of the solid colour, in the range [0, 1].
     /// </summary>
     [ObservableProperty]
-    public partial double A { get; set; }
+    public partial float A { get; set; }
 
     /// <summary>
     /// Gets the solid colour as an <see cref="Avalonia.Media.Color"/> instance.
@@ -72,9 +71,9 @@ public sealed partial class SolidColourRendererSettings : ObservableObject, IRen
         OnPropertyChanged(nameof(ColourBrush));
         OnPropertyChanged(nameof(ColourBrushOpaque));
     }
-    partial void OnRChanged(double value) => ColourChannelChanged();
-    partial void OnGChanged(double value) => ColourChannelChanged();
-    partial void OnBChanged(double value) => ColourChannelChanged();
-    partial void OnAChanged(double value) => ColourChannelChanged();
+    partial void OnRChanged(float value) => ColourChannelChanged();
+    partial void OnGChanged(float value) => ColourChannelChanged();
+    partial void OnBChanged(float value) => ColourChannelChanged();
+    partial void OnAChanged(float value) => ColourChannelChanged();
     #endregion
 }

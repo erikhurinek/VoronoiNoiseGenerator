@@ -1,17 +1,16 @@
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// A mock implementation of <see cref="IBitmapSaveService"/> that does nothing when saving files.
+/// A mock implementation of <see cref="ISaveService"/> that does nothing when saving files.
 /// </summary>
-public sealed class MockImageSaveService : IBitmapSaveService
+public sealed class MockImageSaveService : ISaveService
 {
     /// <inheritdoc/>
-    public Task SaveFileAsync(Bitmap bitmap) => Task.CompletedTask;
+    public Task SaveFileAsync(TextureBuffer texture) => Task.CompletedTask;
 
     /// <inheritdoc/>
-    public Task SaveFileAsync(Bitmap bitmap, FilePickerSaveOptions options) => Task.CompletedTask;
+    public Task SaveFileAsync(TextureBuffer texture, FilePickerSaveOptions options) => Task.CompletedTask;
 }

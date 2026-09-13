@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Avalonia.Media.Imaging;
+using System.Numerics;
 
 namespace VoronoiNoiseGenerator.Models;
 
@@ -13,24 +13,19 @@ public sealed class VoronoiDistanceRenderer : IRenderer
     public RendererDescriptor Descriptor => new("Voronoi Distance", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
-    public void Render(WriteableBitmap target, PassSettings settings)
+    public void Render(TextureBuffer target, PassSettings settings)
     {
-        // Get the colour mixer
-        IColourMixer colourMixer = settings.ColourMixer;
-
         // Cast the renderer settings to the expected type.
-        VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings;
-
-        if (rendererSettings is null)
-            throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
+        VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings
+            ?? throw new ArgumentException("Invalid renderer settings for VoronoiDistanceRenderer.");
 
         // It doesn't really matter whether sample coordinates are wrapped or not, since we only care about distance.
         WrapBehaviour wrapBehaviour = rendererSettings.Wrap ? WrapBehaviour.WrapDistanceUnwrapCoordinates : WrapBehaviour.NoWrap;
 
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
-            target.PixelSize.Width,
-            target.PixelSize.Height,
+            target.Width,
+            target.Height,
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
@@ -42,7 +37,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based on the distance.
-        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
         {
             // Get all relevant samples.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);
@@ -56,8 +51,8 @@ public sealed class VoronoiDistanceRenderer : IRenderer
             Neighbour minSample = neighbours.OrderBy(n => n.DistanceSquared).First();
 
             // Calculate and set the intensity.
-            double intensity = Math.Min(minSample.Distance / rendererSettings.Radius / 2.0, 1.0);
-            return new Colour(intensity, intensity, intensity, intensity);
+            float intensity = MathF.Min(minSample.Distance / rendererSettings.Radius / 2.0f, 1.0f);
+            return new Vector4(intensity);
         });
     }
 }

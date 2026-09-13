@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Avalonia.Media.Imaging;
+using System.Numerics;
 
 namespace VoronoiNoiseGenerator.Models;
 
@@ -15,7 +15,7 @@ public sealed class VoronoiPositionRenderer : IRenderer
     public RendererDescriptor Descriptor => new("Voronoi Position", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
-    public void Render(WriteableBitmap target, PassSettings settings)
+    public void Render(TextureBuffer target, PassSettings settings)
     {
         // Cast the renderer settings to the expected type.
         VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings
@@ -26,8 +26,8 @@ public sealed class VoronoiPositionRenderer : IRenderer
 
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
-            target.PixelSize.Width,
-            target.PixelSize.Height,
+            target.Width,
+            target.Height,
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
@@ -39,7 +39,7 @@ public sealed class VoronoiPositionRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based the position of the nearest sample.
-        BitmapIterator.Iterate(target, settings.ColourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
         {
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);
 
@@ -48,11 +48,12 @@ public sealed class VoronoiPositionRenderer : IRenderer
 
             Neighbour nearestSample = neighbours.First();
 
-            const double oneThird = 1.0 / 3.0;
-            double factorX = oneThird + oneThird * nearestSample.X / target.PixelSize.Width;
-            double factorY = oneThird + oneThird * nearestSample.Y / target.PixelSize.Height;
 
-            return new Colour(factorX, factorY, 1.0 - factorX, 1.0 - factorY);
+            const float oneThird = 1.0f / 3.0f;
+            float factorX = oneThird + oneThird * nearestSample.X / target.Width;
+            float factorY = oneThird + oneThird * nearestSample.Y / target.Height;
+
+            return new Vector4(factorX, factorY, 1.0f - factorX, 1.0f - factorY);
         });
     }
 }

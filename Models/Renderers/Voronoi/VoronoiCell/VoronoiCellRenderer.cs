@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Avalonia.Media.Imaging;
 
 namespace VoronoiNoiseGenerator.Models;
 
@@ -13,7 +12,7 @@ public sealed class VoronoiCellRenderer : IRenderer
     public RendererDescriptor Descriptor => new("Voronoi Cell", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
-    public void Render(WriteableBitmap target, PassSettings settings)
+    public void Render(TextureBuffer target, PassSettings settings)
     {
         // Get the colour mixer
         IColourMixer colourMixer = settings.ColourMixer;
@@ -29,8 +28,8 @@ public sealed class VoronoiCellRenderer : IRenderer
 
         // Create a Poisson disc sampler.
         ISampler sampler = SamplerFactory.CreatePoissonDiscSampler(
-            target.PixelSize.Width,
-            target.PixelSize.Height,
+            target.Width,
+            target.Height,
             rendererSettings.Radius,
             rendererSettings.MaxSamples,
             rendererSettings.Subsamples,
@@ -45,7 +44,7 @@ public sealed class VoronoiCellRenderer : IRenderer
         CoordinateHasher hasher = new();
 
         // Iterate over each pixel, and set the color based the nearest sample.
-        BitmapIterator.Iterate(target, colourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, colourMixer, (x, y) =>
         {
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);
 
