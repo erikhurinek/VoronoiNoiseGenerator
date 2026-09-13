@@ -23,19 +23,14 @@ public partial class MainViewModel : ViewModelBase
     const int MAX_RENDER_PASSES = 8;
 
     /// <summary>
-    /// The list of available renderer descriptors.
-    /// </summary>
-    private IEnumerable<RendererDescriptor> _descriptors;
-
-    /// <summary>
     /// The registry for managing renderer instances.
     /// </summary>
-    private IEnumerable<ColourMixerDescriptor> _colourMixerDescriptors;
+    private ColourMixerFactory _colourMixerFactory;
 
     /// <summary>
     /// Registry managing the available renderers.
     /// </summary>
-    private RendererRegistry _rendererRegistry;
+    private RendererFactory _rendererRegistry;
 
     /// <summary>
     /// The service responsible for saving images to disk.
@@ -100,10 +95,9 @@ public partial class MainViewModel : ViewModelBase
     /// </summary>
     public MainViewModel()
     {
-        _descriptors = new List<RendererDescriptor>();
-        _colourMixerDescriptors = new List<ColourMixerDescriptor>();
+        _colourMixerFactory = new ColourMixerFactory();
         _textureExportService = new MockExportService();
-        _rendererRegistry = new RendererRegistry();
+        _rendererRegistry = new RendererFactory();
     }
 
     /// <summary>
@@ -111,17 +105,16 @@ public partial class MainViewModel : ViewModelBase
     /// </summary>
     /// <param name="rendererFactory">The factory for creating renderer instances.</param>
     /// <param name="renderers">The available renderers.</param>
-    /// <param name="colourMixers">The available colour mixers.</param>
+    /// <param name="colourMixerFactory">The factory for creating colour mixer instances.</param>
     /// <param name="fileSaveService">The service for saving images to disk.</param>
     public MainViewModel(
-        RendererRegistry rendererFactory,
+        RendererFactory rendererFactory,
         IEnumerable<IRenderer> renderers,
-        IEnumerable<IColourMixer> colourMixers,
+        ColourMixerFactory colourMixerFactory,
         IExportService exportService
     )
     {
-        _descriptors = renderers.Select(r => r.Descriptor);
-        _colourMixerDescriptors = colourMixers.Select(c => c.Descriptor);
+        _colourMixerFactory = colourMixerFactory;
         _textureExportService = exportService;
         _rendererRegistry = rendererFactory;
     }
@@ -152,7 +145,7 @@ public partial class MainViewModel : ViewModelBase
                     continue;
 
                 // Get the required renderer instance.
-                IRenderer renderer = _rendererRegistry.Get(descriptor.RendererType);
+                IRenderer renderer = _rendererRegistry.Create(descriptor);
 
                 // Modify the bitmap.
                 renderer.Render(buffer, pass);
@@ -172,7 +165,7 @@ public partial class MainViewModel : ViewModelBase
     private void AddPass()
     {
         if (Passes.Count < MAX_RENDER_PASSES)
-            Passes.Add(new PassSettings(_descriptors, _colourMixerDescriptors));
+            Passes.Add(new PassSettings(_rendererRegistry.Descriptors, _colourMixerFactory.Descriptors));
     }
 
     /// <summary>

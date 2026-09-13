@@ -8,13 +8,13 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class SolidColourRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Solid Colour", GetType(), typeof(SolidColourRendererSettings));
+    public RendererDescriptor Descriptor => new RendererDescriptor("Solid Colour", GetType(), typeof(SolidColourRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
     {
         // Get the colour mixer
-        IColourMixer colourMixer = settings.ColourMixer;
+        IColourMixer colourMixer = settings.SelectedColourMixer;
 
         // Cast the renderer settings to the expected type.
         SolidColourRendererSettings? rendererSettings = settings.RendererSettings as SolidColourRendererSettings

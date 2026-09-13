@@ -3,13 +3,8 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// Interface for a renderer that can modify a bitmap.
 /// </summary>
-public interface IRenderer
+public interface IRenderer : IFactoryInstantiable<RendererDescriptor>
 {
-    /// <summary>
-    /// The renderer descriptor, which uniquely identifies the renderer.
-    /// </summary>
-    RendererDescriptor Descriptor { get; }
-
     /// <summary>
     /// Renders the specified settings onto the target bitmap.
     /// </summary>

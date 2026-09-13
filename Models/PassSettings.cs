@@ -44,8 +44,9 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     /// <summary>
     /// The currently selected colour mixer instance.
     /// </summary>
-    public IColourMixer ColourMixer { get; private set; } = CreateColourMixer(availableColourMixers.First())
-        ?? throw new InvalidOperationException($"Could not create an instance of {availableColourMixers.FirstOrDefault()?.MixerType.FullName}.");
+    [ObservableProperty]
+    public partial IColourMixer SelectedColourMixer { get; private set; } = CreateColourMixer(availableColourMixers.First())
+        ?? throw new InvalidOperationException($"Could not create an instance of {availableColourMixers.FirstOrDefault()?.DescribedType.FullName}.");
 
     /// <summary>
     /// Whether this pass should be rendered.
@@ -91,7 +92,7 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
         if (value is null)
             return;
 
-        ColourMixer = CreateColourMixer(value) ?? throw new InvalidOperationException($"Could not create an instance of {value?.MixerType.FullName}.");
+        SelectedColourMixer = CreateColourMixer(value) ?? throw new InvalidOperationException($"Could not create an instance of {value?.DescribedType.FullName}.");
     }
 
     /// <summary>
@@ -102,8 +103,8 @@ public partial class PassSettings(IEnumerable<RendererDescriptor> availableRende
     /// <exception cref="InvalidOperationException">Thrown when the colour mixer instance could not be created.</exception>
     private static IColourMixer CreateColourMixer(ColourMixerDescriptor descriptor)
     {
-        if (Activator.CreateInstance(descriptor.MixerType) is not IColourMixer mixer)
-            throw new InvalidOperationException($"Could not create an instance of {descriptor.MixerType.FullName}.");
+        if (Activator.CreateInstance(descriptor.DescribedType) is not IColourMixer mixer)
+            throw new InvalidOperationException($"Could not create an instance of {descriptor.DescribedType.FullName}.");
 
         return mixer;
     }

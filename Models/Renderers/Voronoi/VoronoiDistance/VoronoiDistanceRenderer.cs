@@ -10,7 +10,7 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class VoronoiDistanceRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Voronoi Distance", GetType(), typeof(VoronoiRendererSettings));
+    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Distance", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
@@ -37,7 +37,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based on the distance.
-        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
         {
             // Get all relevant samples.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius * 2);

@@ -5,14 +5,14 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// Describes an implementation of <see cref="IRenderer"/> 
 /// </summary>
-/// <param name="DisplayName">The display name to show in the UI.</param>
-/// <param name="RendererType">The type of the renderer.</param>
+/// <param name="Name">The display name to show in the UI.</param>
+/// <param name="DescribedType">The type of the renderer.</param>
 /// <param name="SettingsType">The type of the renderer settings.</param>
 public sealed record RendererDescriptor(
-    string DisplayName,
-    Type RendererType,
+    string Name,
+    Type DescribedType,
     Type SettingsType
-)
+) : IDescriptor
 {
-    public override string ToString() => DisplayName;
+    public override string ToString() => Name;
 }

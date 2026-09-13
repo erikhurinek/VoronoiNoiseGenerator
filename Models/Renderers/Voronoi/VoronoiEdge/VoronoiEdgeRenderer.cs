@@ -12,7 +12,7 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class VoronoiEdgeRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Voronoi Edge", GetType(), typeof(VoronoiRendererSettings));
+    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Edge", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
@@ -40,7 +40,7 @@ public sealed class VoronoiEdgeRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based the nearest sample.
-        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
         {
             // Get all neighbours.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius)

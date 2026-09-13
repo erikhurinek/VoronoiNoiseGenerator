@@ -9,7 +9,7 @@ namespace VoronoiNoiseGenerator.Models;
 public partial class ColourMixerChannel : ObservableObject, IColourMixer
 {
     /// <inheritdoc/>
-    public ColourMixerDescriptor Descriptor => new("Channel Mixer", GetType());
+    public ColourMixerDescriptor Descriptor => new ColourMixerDescriptor("Channel Mixer", GetType());
 
     /// <summary>
     /// The factor to use for mixing the colours.

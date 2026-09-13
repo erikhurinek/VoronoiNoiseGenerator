@@ -15,12 +15,14 @@ namespace VoronoiNoiseGenerator.Models;
 /// An implementation of <see cref="IExportService"/> that uses a file save dialog to export textures.
 /// </summary>
 /// <param name="window">The main application window.</param>
-/// <param name="exporters">A collection of available exporters.</param>
-public sealed class DialogExportService(Window window, IEnumerable<IExporter> exporters) : IExportService
+/// <param name="exporterFactory">A collection of available exporters.</param>
+public sealed class DialogExportService(Window window, ExporterFactory exporterFactory) : IExportService
 {
-    private readonly IReadOnlyList<IExporter> _exporters = exporters.ToList();
+    /// <summary>
+    /// A list of file picker types.
+    /// </summary>
     private readonly IReadOnlyList<FilePickerFileType> _filePickerFileTypes =
-        exporters.Select(e => e.Descriptor.FileType).ToList();
+        exporterFactory.Descriptors.Select(d => d.FileType).ToList();
 
     /// <inheritdoc/>
     public async Task SaveFileAsync(TextureBuffer textureBuffer)
@@ -44,8 +46,7 @@ public sealed class DialogExportService(Window window, IEnumerable<IExporter> ex
             return;
         }
 
-        IExporter? exporter = _exporters.FirstOrDefault(e =>
-            e.Descriptor.FileType.Patterns?.Any(p => MatchesExtension(p, extension)) ?? false);
+        IExporter? exporter = exporterFactory.GetMatchingExporterByExtension(extension);
 
         if (exporter is null)
         {
@@ -56,18 +57,11 @@ public sealed class DialogExportService(Window window, IEnumerable<IExporter> ex
         await exporter.ExportAsync(textureBuffer, result);
     }
 
-    private static bool MatchesExtension(string pattern, string extension)
-    {
-        // Patterns are glob-style ("*.png") — strip the "*." prefix so we're comparing
-        // like-for-like against the raw extension. Case-insensitive since Windows/macOS
-        // filesystems don't distinguish ".PNG" from ".png" and users expect either to work.
-        string patternExtension = pattern.StartsWith("*.", StringComparison.Ordinal)
-            ? pattern[2..]
-            : pattern;
-
-        return string.Equals(patternExtension, extension, StringComparison.OrdinalIgnoreCase);
-    }
-
+    /// <summary>
+    /// Shows a dialog indicating that the specified file type is unsupported.
+    /// </summary>
+    /// <param name="extensionOrName">The file extension or name of the unsupported file type.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task ShowUnsupportedFileTypeDialogAsync(string extensionOrName)
     {
         var dialog = new Window

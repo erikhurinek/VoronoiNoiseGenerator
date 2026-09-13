@@ -8,10 +8,10 @@ namespace VoronoiNoiseGenerator.Models;
 /// <param name="DisplayName">The display name of the colour mixer.</param>
 /// <param name="MixerType">The type of colour mixer. See <see cref="IColourMixer"/>.</param>
 public sealed record ColourMixerDescriptor(
-    string DisplayName,
-    Type MixerType
-)
+    string Name,
+    Type DescribedType
+) : IDescriptor
 {
     /// <inheritdoc/>
-    public override string ToString() => DisplayName;
+    public override string ToString() => Name;
 }

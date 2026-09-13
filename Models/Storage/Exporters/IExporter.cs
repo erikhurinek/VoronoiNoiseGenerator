@@ -3,13 +3,8 @@ using Avalonia.Platform.Storage;
 
 namespace VoronoiNoiseGenerator.Models;
 
-public interface IExporter
+public interface IExporter : IFactoryInstantiable<ExporterDescriptor>
 {
-    /// <summary>
-    /// Gets the descriptor for this exporter.
-    /// </summary>
-    public ExporterDescriptor Descriptor { get; }
-
     /// <summary>
     /// Exports the given texture buffer to a file.
     /// </summary>

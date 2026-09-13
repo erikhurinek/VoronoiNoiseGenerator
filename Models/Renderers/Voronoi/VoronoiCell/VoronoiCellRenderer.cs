@@ -9,13 +9,13 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class VoronoiCellRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Voronoi Cell", GetType(), typeof(VoronoiRendererSettings));
+    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Cell", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
     {
         // Get the colour mixer
-        IColourMixer colourMixer = settings.ColourMixer;
+        IColourMixer colourMixer = settings.SelectedColourMixer;
 
         // Cast the renderer settings to the expected type.
         VoronoiRendererSettings? rendererSettings = settings.RendererSettings as VoronoiRendererSettings;

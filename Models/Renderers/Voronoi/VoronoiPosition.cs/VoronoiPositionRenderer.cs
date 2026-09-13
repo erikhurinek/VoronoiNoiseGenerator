@@ -12,7 +12,7 @@ namespace VoronoiNoiseGenerator.Models;
 public sealed class VoronoiPositionRenderer : IRenderer
 {
     /// <inheritdoc/>
-    public RendererDescriptor Descriptor => new("Voronoi Position", GetType(), typeof(VoronoiRendererSettings));
+    public RendererDescriptor Descriptor => new RendererDescriptor("Voronoi Position", GetType(), typeof(VoronoiRendererSettings));
 
     /// <inheritdoc/>
     public void Render(TextureBuffer target, PassSettings settings)
@@ -39,7 +39,7 @@ public sealed class VoronoiPositionRenderer : IRenderer
         ISampleCollection samples = sampler.GenerateSamples();
 
         // Iterate over each pixel, and set the color based the position of the nearest sample.
-        TextureBufferIterator.Iterate(target, settings.ColourMixer, (x, y) =>
+        TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
         {
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);
 

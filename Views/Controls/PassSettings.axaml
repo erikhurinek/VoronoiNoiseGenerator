@@ -55,7 +55,7 @@
                 </Expander.Header>
                 <StackPanel Orientation="Vertical" Spacing="5">
                     <ComboBox ItemsSource="{Binding AvailableColourMixers}" SelectedItem="{Binding SelectedColourMixerDescriptor, Mode=TwoWay}" HorizontalAlignment="Stretch" />
-                    <ContentControl Content="{Binding ColourMixer, Mode=OneWay}" />
+                    <ContentControl Content="{Binding SelectedColourMixer, Mode=OneWay}" />
                 </StackPanel>
             </Expander>
         </StackPanel>

@@ -28,22 +28,15 @@ public partial class App : Application
         // Register main window
         services.AddSingleton<Window>(mainWindow);
 
-        // Register renderers.
-        services.AddSingleton<IRenderer, SolidColourRenderer>();
-        services.AddSingleton<IRenderer, VoronoiDistanceRenderer>();
-        services.AddSingleton<IRenderer, VoronoiCellRenderer>();
-        services.AddSingleton<IRenderer, VoronoiEdgeRenderer>();
-        services.AddSingleton<IRenderer, VoronoiPositionRenderer>();
-
         // Register exporters.
-        services.AddSingleton<IExporter, PngExporter>();
+        services.AddSingleton<ExporterFactory>();
         services.AddSingleton<IExportService, DialogExportService>();
 
-        // Register colour mixers.
-        services.AddSingleton<IColourMixer, Models.ColourMixerChannel>();
+        // Register colour mixer factory.
+        services.AddSingleton<ColourMixerFactory>();
 
         // Register the renderer registry and view model.
-        services.AddSingleton<RendererRegistry>();
+        services.AddSingleton<RendererFactory>();
         services.AddSingleton<MainViewModel>();
         // services.AddSingleton<ISaveService>(new TextureBufferSaveService(mainWindow));
 
