@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:VoronoiNoiseGenerator.Models"
-    xmlns:views="using:VoronoiNoiseGenerator.Views"
     x:Class="VoronoiNoiseGenerator.Views.SolidColourRendererSettings"
     x:DataType="models:SolidColourRendererSettings">
     <Grid RowSpacing="5" ColumnSpacing="5">
@@ -22,10 +21,19 @@
         <TextBox Grid.Column="2" Text="{Binding B, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
         <TextBox Grid.Column="3" Text="{Binding A, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
 
-        <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
-                        Background="{Binding ColourBrush}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                        Height="30"
-                        CornerRadius="6" />
+        <Grid Grid.Row="1" Grid.ColumnSpan="4" ColumnDefinitions="*,*">
+            <Border Background="{Binding ColourBrushOpaque}"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    Height="10"
+                    CornerRadius="5,0,0,5" />
+
+            <Panel Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="10">
+                <Border Background="{StaticResource TransparencyCheckerboardBrush}"
+                        CornerRadius="0,5,5,0" />
+
+                <Border Background="{Binding ColourBrush}"
+                        CornerRadius="0,5,5,0" />
+            </Panel>
+        </Grid>
     </Grid>
 </UserControl>

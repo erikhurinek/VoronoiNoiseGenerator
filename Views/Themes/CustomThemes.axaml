@@ -64,7 +64,7 @@
                             Foreground="{TemplateBinding Foreground}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Padding="5" />
+                            Padding="5,5,5,0" />
                     </Border>
                 </DockPanel>
             </ControlTemplate>
@@ -114,7 +114,6 @@
             </ControlTemplate>
         </Setter>
 
-        <!-- PointerOver -->
         <Style Selector="^:pointerover /template/ Border#ButtonBackground">
             <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundPointerOver}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushPointerOver}" />
@@ -123,7 +122,6 @@
             <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundPointerOver}" />
         </Style>
 
-        <!-- Pressed -->
         <Style Selector="^:pressed /template/ Border#ButtonBackground">
             <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundPressed}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushPressed}" />
@@ -132,7 +130,6 @@
             <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundPressed}" />
         </Style>
 
-        <!-- Disabled -->
         <Style Selector="^:disabled /template/ Border#ButtonBackground">
             <Setter Property="Background" Value="{DynamicResource ExpanderChevronBackgroundDisabled}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ExpanderChevronBorderBrushDisabled}" />
@@ -140,6 +137,18 @@
         <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Foreground" Value="{DynamicResource ExpanderChevronForegroundDisabled}" />
         </Style>
-
     </ControlTheme>
+
+    <VisualBrush
+        x:Key="TransparencyCheckerboardBrush"
+        TileMode="Tile"
+        Stretch="None"
+        DestinationRect="0,0,8,8">
+        <VisualBrush.Visual>
+            <Canvas Width="8" Height="8" Background="White">
+                <Rectangle Width="4" Height="4" Fill="LightGray" />
+                <Rectangle Width="4" Height="4" Canvas.Left="4" Canvas.Top="4" Fill="LightGray" />
+            </Canvas>
+        </VisualBrush.Visual>
+    </VisualBrush>
 </ResourceDictionary>

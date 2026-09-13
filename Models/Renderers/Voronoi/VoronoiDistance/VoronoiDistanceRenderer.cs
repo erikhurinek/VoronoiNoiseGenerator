@@ -56,7 +56,7 @@ public sealed class VoronoiDistanceRenderer : IRenderer
             Neighbour minSample = neighbours.OrderBy(n => n.DistanceSquared).First();
 
             // Calculate and set the intensity.
-            double intensity = Math.Min(minSample.Distance / rendererSettings.Radius, 1.0);
+            double intensity = Math.Min(minSample.Distance / rendererSettings.Radius / 2.0, 1.0);
             return new Colour(intensity, intensity, intensity, intensity);
         });
     }

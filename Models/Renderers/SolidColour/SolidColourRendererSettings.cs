@@ -39,6 +39,11 @@ public sealed partial class SolidColourRendererSettings : ObservableObject, IRen
     public SolidColorBrush ColourBrush => new(new Color((byte)(A * 255), (byte)(R * 255), (byte)(G * 255), (byte)(B * 255)));
 
     /// <summary>
+    /// Gets the solid colour as an <see cref="Avalonia.Media.Color"/> instance, with full opacity (alpha = 1).
+    /// </summary>
+    public SolidColorBrush ColourBrushOpaque => new(new Color(255, (byte)(R * 255), (byte)(G * 255), (byte)(B * 255)));
+
+    /// <summary>
     /// Gets the solid colour as a <see cref="Colour"/> instance.
     /// </summary>
     public Colour Colour
@@ -62,9 +67,14 @@ public sealed partial class SolidColourRendererSettings : ObservableObject, IRen
     }
 
     #region Property Change Handlers
-    partial void OnRChanged(double value) => OnPropertyChanged(nameof(ColourBrush));
-    partial void OnGChanged(double value) => OnPropertyChanged(nameof(ColourBrush));
-    partial void OnBChanged(double value) => OnPropertyChanged(nameof(ColourBrush));
-    partial void OnAChanged(double value) => OnPropertyChanged(nameof(ColourBrush));
+    private void ColourChannelChanged()
+    {
+        OnPropertyChanged(nameof(ColourBrush));
+        OnPropertyChanged(nameof(ColourBrushOpaque));
+    }
+    partial void OnRChanged(double value) => ColourChannelChanged();
+    partial void OnGChanged(double value) => ColourChannelChanged();
+    partial void OnBChanged(double value) => ColourChannelChanged();
+    partial void OnAChanged(double value) => ColourChannelChanged();
     #endregion
 }
