@@ -33,4 +33,12 @@ public interface ISampleGrid : ISampleCollection
     /// <param name="y">Sample y-coordinate.</param>
     /// <returns>Whether the grid cell is occupied by a sample.</returns>
     public bool Occupied(double x, double y);
+
+    /// <summary>
+    /// Returns true if the given sample coordinates are out of bounds of the grid.
+    /// </summary>
+    /// <param name="x">Sample x-coordinate.</param>
+    /// <param name="y">Sample y-coordinate.</param>
+    /// <returns>Whether the sample is out of bounds.</returns>
+    public bool OutOfBounds(double x, double y);
 }

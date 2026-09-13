@@ -123,9 +123,13 @@ public sealed class PoissonDiscSampler(
                 // Add the candidate if it's valid.
                 if (!tooClose && !grid.Occupied(candidate.Item1, candidate.Item2))
                 {
+                    // Add the candidate to the grid.
                     grid.Add(candidate.Item1, candidate.Item2);
-                    activeQueue.Enqueue(candidate);
                     sampleCount++;
+
+                    // Enqueue the candidate if it's within the bounds.
+                    if (!grid.OutOfBounds(candidate.Item1, candidate.Item2))
+                        activeQueue.Enqueue(candidate);
                 }
             }
         }

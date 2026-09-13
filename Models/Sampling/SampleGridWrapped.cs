@@ -191,4 +191,10 @@ public sealed class SampleGridWrapped(double width, double height, int gridWidth
             }
         }
     }
+
+    /// <summary>
+    /// Always returns false, since this grid is wrapped.
+    /// </summary>
+    /// <inheritdoc/>
+    public bool OutOfBounds(double x, double y) => false;
 }

@@ -51,15 +51,20 @@ public readonly struct Colour(double red, double green, double blue, double alph
     /// <summary>
     /// A fully transparent color (0,0,0,0).
     /// </summary>
-    public static readonly Colour Transparent = new(0, 0, 0, 0);
+    public static Colour Transparent => new(0, 0, 0, 0);
 
     /// <summary>
     /// Black color (0,0,0,1).
     /// </summary>
-    public static readonly Colour Black = new(0, 0, 0, 1);
+    public static Colour Black => new(0, 0, 0, 1);
 
     /// <summary>
     /// White color (1,1,1,1).
     /// </summary>
-    public static readonly Colour White = new(1, 1, 1, 1);
+    public static Colour White => new(1, 1, 1, 1);
+
+    /// <summary>
+    /// Deep red color (0.86, 0.08, 0.24, 1).
+    /// </summary>
+    public static Colour DeepRed => new(0.86, 0.08, 0.24, 1);
 }

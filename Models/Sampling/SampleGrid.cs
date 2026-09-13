@@ -37,14 +37,6 @@ public sealed class SampleGrid(double width, double height, int gridWidth, int g
     /// <returns>The grid cell coordinates.</returns>
     private (int X, int Y) SampleToVoxel(double x, double y) => ((int)x / GridWidth, (int)y / GridHeight);
 
-    /// <summary>
-    /// Helper method to check if a sample is out of bounds of the grid.
-    /// </summary>
-    /// <param name="x">The x-coordinate of the sample.</param>
-    /// <param name="y">The y-coordinate of the sample.</param>
-    /// <returns>True if the sample is out of bounds, false otherwise.</returns>
-    private bool IsOutOfBounds(double x, double y) => x < 0 || x >= Width || y < 0 || y >= Height;
-
     /// <param name="distance">The Manhattan distance to search for neighbours.</param>
     /// <inheritdoc/>
     public IEnumerable<Neighbour> Neighbours(double x, double y, double distance)
@@ -74,16 +66,9 @@ public sealed class SampleGrid(double width, double height, int gridWidth, int g
         }
     }
 
-    /// <summary>
-    /// Adds a sample to the grid.
-    /// Will not add the sample if it is out of bounds.
-    /// </summary>
     /// <inheritdoc/>
     public void Add(double x, double y)
     {
-        if (IsOutOfBounds(x, y))
-            return;
-
         var voxel = SampleToVoxel(x, y);
         _voxelMap[voxel] = (x, y);
     }
@@ -96,6 +81,9 @@ public sealed class SampleGrid(double width, double height, int gridWidth, int g
     public bool Occupied(double x, double y)
     {
         var voxel = SampleToVoxel(x, y);
-        return IsOutOfBounds(x, y) || _voxelMap.ContainsKey(voxel);
+        return _voxelMap.ContainsKey(voxel);
     }
+
+    /// <inheritdoc/>
+    public bool OutOfBounds(double x, double y) => x < 0 || x >= Width || y < 0 || y >= Height;
 }
