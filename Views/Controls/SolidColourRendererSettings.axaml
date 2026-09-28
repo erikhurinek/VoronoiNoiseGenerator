@@ -16,10 +16,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Column="0" Text="{Binding R, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Text="{Binding G, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-        <TextBox Grid.Column="2" Text="{Binding B, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-        <TextBox Grid.Column="3" Text="{Binding A, Mode=TwoWay, StringFormat={}{0:0.00}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="0" Text="{Binding R, Mode=TwoWay, StringFormat={}{0:0.000}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Text="{Binding G, Mode=TwoWay, StringFormat={}{0:0.000}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="2" Text="{Binding B, Mode=TwoWay, StringFormat={}{0:0.000}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        <TextBox Grid.Column="3" Text="{Binding A, Mode=TwoWay, StringFormat={}{0:0.000}}" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
 
         <Grid Grid.Row="1" Grid.ColumnSpan="4" ColumnDefinitions="*,*">
             <Border Background="{Binding ColourBrushOpaque}"

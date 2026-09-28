@@ -40,7 +40,7 @@ public sealed class VoronoiCellRenderer : IRenderer
         // Create a colour cache to store the colours of the samples.
         CoordinateHasher hasher = new();
 
-        // Iterate over each pixel, and set the color based the nearest sample.
+        // Iterate over each pixel, and set the color based on the nearest sample.
         TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
         {
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);

@@ -10,6 +10,7 @@ public sealed class ColourMixerFactory : SingletonFactory<IColourMixer, ColourMi
     /// <inheritdoc/>
     public override IEnumerable<ColourMixerDescriptor> Descriptors =>
     [
-        ColourMixerChannel.Descriptor,
+        ColourMixerLerp.Descriptor,
+        ColourMixerMultipliers.Descriptor
     ];
 }

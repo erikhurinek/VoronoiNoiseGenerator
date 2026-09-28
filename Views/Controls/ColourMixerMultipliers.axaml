@@ -2,25 +2,51 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:VoronoiNoiseGenerator.Models"
-    x:Class="VoronoiNoiseGenerator.Views.ColourMixerChannel"
-    x:DataType="models:ColourMixerChannel">
+    x:Class="VoronoiNoiseGenerator.Views.ColourMixerMultipliers"
+    x:DataType="models:ColourMixerMultipliers">
 
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="5">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="5">
         <Label
             Grid.Row="0"
             Grid.Column="0"
-            Content="Factor: "
+            Content="Foreground: "
             HorizontalAlignment="Right"
             VerticalAlignment="Center" />
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
-            Text="{Binding Factor, Mode=TwoWay}"
+            Text="{Binding ForegroundMultiplier, Mode=TwoWay, StringFormat={}{0:0.000}}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center" />
 
-        <Grid
+        <Label
             Grid.Row="1"
+            Grid.Column="0"
+            Content="Background: "
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding BackgroundMultiplier, Mode=TwoWay, StringFormat={}{0:0.000}}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center" />
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Content="Normalise: "
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center" />
+        <CheckBox
+            Grid.Row="2"
+            Grid.Column="1"
+            IsChecked="{Binding Normalise, Mode=TwoWay}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center" />
+
+        <Grid
+            Grid.Row="3"
             Grid.ColumnSpan="2"
             ColumnDefinitions="*,*,*,*"
             HorizontalAlignment="Stretch">
@@ -63,7 +89,6 @@
                 HorizontalAlignment="Stretch"
                 Margin="-1,0,0,0"
                 Padding="8,4" />
-
         </Grid>
     </Grid>
 </UserControl>

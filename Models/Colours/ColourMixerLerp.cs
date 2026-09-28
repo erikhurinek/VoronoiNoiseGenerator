@@ -6,12 +6,12 @@ namespace VoronoiNoiseGenerator.Models;
 /// <summary>
 /// Represents a colour mixer that linearly mixes two colours based on a specified factor and channel selection.
 /// </summary>
-public partial class ColourMixerChannel : ObservableObject, IColourMixer
+public partial class ColourMixerLerp : ObservableObject, IColourMixer
 {
     /// <summary>
     /// Gets the descriptor for this colour mixer.
     /// </summary>
-    public static ColourMixerDescriptor Descriptor => new("Channel Mixer", typeof(ColourMixerChannel));
+    public static ColourMixerDescriptor Descriptor => new("Lerp Mix", typeof(ColourMixerLerp));
 
     /// <summary>
     /// The factor to use for mixing the colours.

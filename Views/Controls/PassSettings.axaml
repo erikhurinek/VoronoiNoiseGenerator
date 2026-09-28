@@ -10,8 +10,11 @@
         <DataTemplate x:DataType="models:VoronoiRendererSettings">
             <views:VoronoiRendererSettings />
         </DataTemplate>
-        <DataTemplate x:DataType="models:ColourMixerChannel">
-            <views:ColourMixerChannel />
+        <DataTemplate x:DataType="models:ColourMixerLerp">
+            <views:ColourMixerLerp />
+        </DataTemplate>
+        <DataTemplate x:DataType="models:ColourMixerMultipliers">
+            <views:ColourMixerMultipliers />
         </DataTemplate>
         <DataTemplate x:DataType="models:SolidColourRendererSettings">
             <views:SolidColourRendererSettings />
