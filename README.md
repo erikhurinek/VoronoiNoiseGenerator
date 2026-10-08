@@ -23,6 +23,23 @@ This applications supports four types:
 - **Edge**: The distance to the nearest edge between samples.
 - **Position**: The position of the nearest sample, remapped from [-1,2] to [0,1].
 
+## Building and Running
+
+### Prerequisites 
+ - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+ - Git
+
+### Run From Source
+Clone the repository and run:
+
+```bash
+git clone https://github.com/erikhurinek/VoronoiNoiseGenerator.git
+cd VoronoiNoiseGenerator
+
+dotnet restore
+dotnet run
+```
+
 ---
 
 I wrote a similar application, [Voronoi Generator](https://github.com/erikhurinek/VoronoiGenerator), a few years ago.
