@@ -6,8 +6,6 @@ namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
 /// A renderer that displays the distance to the nearest perpendicular bisector between the closest two samples.
-/// Unlike <see cref="VoronoiEdgeRenderer"/>, this renderer calculates the distance to all perpendicular bisectors 
-/// for all nearby neighbours and returns the minimum. The result is therefore smoother but more expensive.
 /// </summary>
 public sealed class VoronoiEdgeRenderer : IRenderer
 {
@@ -53,11 +51,12 @@ public sealed class VoronoiEdgeRenderer : IRenderer
             if (neighbours.Count < 2)
                 return Colour.Black;
 
+            // Get the nearest neighbour as our initial sample.
             Neighbour nearest = neighbours[0];
             float nearestDistance = MathF.Sqrt(nearest.DistanceSquared);
-
             float minEdgeDistance = float.PositiveInfinity;
 
+            // Iterate through all neighbours, and find the one with the closest bisector.
             for (int i = 1; i < neighbours.Count; i++)
             {
                 Neighbour other = neighbours[i];
@@ -71,15 +70,19 @@ public sealed class VoronoiEdgeRenderer : IRenderer
                 float dy = nearest.Y - other.Y;
                 float siteDistance = MathF.Sqrt(dx * dx + dy * dy);
 
+                // Avoid division by zero.
                 if (siteDistance == 0.0f)
                     continue;
 
+                // Work out the distance to the bisector.
                 float edgeDistance = (other.DistanceSquared - nearest.DistanceSquared) / (2.0f * siteDistance);
 
+                // Save the distance if it's the minimum seen so far.
                 if (edgeDistance < minEdgeDistance)
                     minEdgeDistance = edgeDistance;
             }
 
+            // Return the scaled distance to the nearest bisector.
             float intensity = minEdgeDistance / (rendererSettings.Radius * 2.0f);
             return new Vector4(intensity);
         });

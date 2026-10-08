@@ -43,11 +43,14 @@ public sealed class VoronoiCellRenderer : IRenderer
         // Iterate over each pixel, and set the color based on the nearest sample.
         TextureBufferIterator.Iterate(target, settings.SelectedColourMixer, (x, y) =>
         {
+            // Get neighbours.
             var neighbours = samples.Neighbours(x, y, rendererSettings.Radius).OrderBy(n => n.DistanceSquared);
 
+            // Can't proceed if we don't have any neighbours, so return.
             if (!neighbours.Any())
                 return Colour.Black;
 
+            // Get the nearest sample and return its colour.
             Neighbour nearestSample = neighbours.First();
 
             return hasher.GetColour(nearestSample.X, nearestSample.Y);

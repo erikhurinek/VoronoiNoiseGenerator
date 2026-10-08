@@ -5,9 +5,10 @@ using System.Numerics;
 namespace VoronoiNoiseGenerator.Models;
 
 /// <summary>
-/// A renderer that displays the distance to the nearest perpendicular bisector between the closest two samples.
-/// Unlike <see cref="VoronoiEdgeRenderer"/>, this renderer calculates the distance to all perpendicular bisectors 
-/// for all nearby neighbours and returns the minimum. The result is therefore smoother but more expensive.
+/// A renderer that displays the position of the nearest sample.
+/// The RGBA channels returned are (x, y, 1-x, 1-y) where x and y are the scaled coordinates of the nearest sample.
+/// The coordinates will be remapped (unclamped) from the range [-1,2] to [0,1] to ensure that samples outside of the texture do not overflow.
+/// Therefore (1/3,1/3) corresponds to a sample in the top left corner, and (2/3,2/3) corresponds to one in the bottom right.
 /// </summary>
 public sealed class VoronoiPositionRenderer : IRenderer
 {
