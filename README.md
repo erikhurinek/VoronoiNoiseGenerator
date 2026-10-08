@@ -25,6 +25,8 @@ This applications supports four types:
 
 ## Building and Running
 
+Note that only Linux has been tested.
+
 ### Prerequisites 
  - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
  - Git
