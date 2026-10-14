@@ -4,10 +4,12 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using TinyEXR;
-using TinyEXR.V3;
 
 namespace VoronoiNoiseGenerator.Models;
 
+/// <summary>
+/// An exporter for the OpenEXR image format.
+/// </summary>
 public sealed class ExrExporter : IExporter
 {
     /// <summary>
@@ -22,14 +24,12 @@ public sealed class ExrExporter : IExporter
     /// <inheritdoc/>
     public async Task ExportAsync(TextureBuffer texture, IStorageFile file)
     {
-        // Reinterpret the Vector4 pixel buffer as a flat interleaved float
-        // array — same 16 bytes per pixel, no copy, no per-pixel conversion.
+        // Reinterpret the Vector4 pixel buffer as a flat interleaved float array.
         ReadOnlySpan<Vector4> pixels = texture.AsSpan();
         ReadOnlySpan<float> floats = MemoryMarshal.Cast<Vector4, float>(pixels);
-
-        // TinyEXR's high-level API expects an owned float[]; materialise once here.
         float[] rgba = floats.ToArray();
 
+        // Encode the pixel data in memory.
         ResultCode result = Exr.SaveEXRToMemory(
             rgba,
             texture.Width,
@@ -38,9 +38,11 @@ public sealed class ExrExporter : IExporter
             asFp16: false,
             out byte[] encoded);
 
+        // Check for errors.
         if (result != ResultCode.Success)
             throw new InvalidOperationException($"EXR encode failed: {result}");
 
+        // Save the data to the specified file.
         using var stream = await file.OpenWriteAsync();
         await stream.WriteAsync(encoded);
     }

@@ -3,6 +3,9 @@ using Avalonia.Platform.Storage;
 
 namespace VoronoiNoiseGenerator.Models;
 
+/// <summary>
+/// An interface for exporters that save texture buffers to files.
+/// </summary>
 public interface IExporter
 {
     /// <summary>

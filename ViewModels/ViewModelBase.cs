@@ -2,6 +2,9 @@
 
 namespace VoronoiNoiseGenerator.ViewModels;
 
+/// <summary>
+/// Pregenerated base class for view models.
+/// </summary>
 public abstract class ViewModelBase : ObservableObject
 {
 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VoronoiNoiseGenerator.Models;

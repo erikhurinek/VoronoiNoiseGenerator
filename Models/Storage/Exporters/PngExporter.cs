@@ -4,6 +4,9 @@ using Avalonia.Platform.Storage;
 
 namespace VoronoiNoiseGenerator.Models;
 
+/// <summary>
+/// An exporter for PNG images.
+/// </summary>
 public class PngExporter : IExporter
 {
     /// <summary>
